@@ -44,4 +44,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: libcodec2_${{ matrix.os }}
-          path: codec2/build/src/libcodec2_${{ matrix.os }}.so
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}

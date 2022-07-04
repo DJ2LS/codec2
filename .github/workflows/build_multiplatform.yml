@@ -79,7 +79,7 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake -CMAKE_SYSTEM_NAME=Windows -TOOLCHAIN_PREFIX i686-w64-mingw32 -CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static" ../
+          cmake -CMAKE_SYSTEM_NAME=Windows -TOOLCHAIN_PREFIX i686-w64-mingw32 -CMAKE_SHARED_LINKER_FLAGS="-static-libgcc -static-libstdc++ -static" ../
           make
           ls -R
 

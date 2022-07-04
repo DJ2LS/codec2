@@ -162,10 +162,9 @@ jobs:
         # Items placed in /artifacts in the container will be in
         # ${PWD}/artifacts on the host.
         run: |
-          ls -R /
           ls -al "${PWD}/artifacts"
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${artifact_name}
-          path: ${PWD}/artifacts/${artifact_name}
+          path: ../artifacts/${artifact_name}

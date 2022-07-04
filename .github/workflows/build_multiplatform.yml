@@ -86,6 +86,7 @@ jobs:
       - name: CAT
         shell: bash
         run: |
+          ls /codec2/build/
           cat /codec2/build/CMakeFiles/CMakeOutput.log
 
 

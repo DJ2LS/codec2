@@ -11,17 +11,17 @@ jobs:
         include:
           - os: ubuntu-20.04
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_${{ matrix.os }}.so
+            libcodec2_os_name: libcodec2_ubuntu-2004.so
             generator: Unix Makefiles
 
           - os: ubuntu-latest
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_${{ matrix.os }}.so
+            libcodec2_os_name: libcodec2_ubuntu-latest.so
             generator: Unix Makefiles
 
           - os: macOS-latest
             libcodec2_name: libcodec2.dylib
-            libcodec2_os_name: libcodec2_${{ matrix.os }}.dylib
+            libcodec2_os_name: libcodec2_macos.dylib
             generator: Unix Makefiles
 
     steps:

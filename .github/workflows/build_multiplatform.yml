@@ -156,8 +156,9 @@ jobs:
             cd build
             cmake ../
             make
+            cd ..
             ls -R
-            mv src/${{ matrix.libcodec2_name }} /artifacts/src/${artifact_name}
+            mv src/libcodec2.so /artifacts/src/${artifact_name}
 
       - name: Show the artifact
         # Items placed in /artifacts in the container will be in

@@ -42,7 +42,6 @@ jobs:
           - os: windows-2016
             libcodec2_name: libcodec2.dll
             libcodec2_os_name: libcodec2_windows-2016.dll
-            generator: Unix Makefiles
 
     steps:
       - name: Build codec2 ${{ matrix.os }}

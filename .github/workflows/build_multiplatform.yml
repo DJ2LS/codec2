@@ -164,7 +164,14 @@ jobs:
         run: |
           ls -al "${PWD}/artifacts"
 
+
+      - name: Show the artifact
+        # Items placed in /artifacts in the container will be in
+        # ${PWD}/artifacts on the host.
+        run: |
+          ls -R /home/runner/work/codec2/codec2/artifacts/
+
       - uses: actions/upload-artifact@v3
         with:
           name: ${artifact_name}
-          path: /home/runner/work/codec2/codec2/artifacts/${artifact_name}
+          path: /home/runner/work/codec2/codec2/artifacts/*

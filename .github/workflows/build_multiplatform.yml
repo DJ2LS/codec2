@@ -172,5 +172,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ libcodec2_os_name }}
+          name: ${{ matrix.libcodec2_os_name }}
           path: /home/runner/work/codec2/codec2/artifacts/*

@@ -156,9 +156,8 @@ jobs:
             cd build
             cmake ../
             make
-            cd ..
             ls -R
-            mv src/libcodec2.so /artifacts/src/${artifact_name}
+            mv ./src/libcodec2.so.1.0 /artifacts/src/${artifact_name}
 
       - name: Show the artifact
         # Items placed in /artifacts in the container will be in

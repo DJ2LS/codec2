@@ -156,13 +156,13 @@ jobs:
             cd build
             cmake ../
             make
-            ls -R
             mv ./src/libcodec2.so.1.0 /artifacts/${artifact_name}
 
       - name: Show the artifact
         # Items placed in /artifacts in the container will be in
         # ${PWD}/artifacts on the host.
         run: |
+          ls -R /
           ls -al "${PWD}/artifacts"
 
       - uses: actions/upload-artifact@v3

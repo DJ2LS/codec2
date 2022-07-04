@@ -56,6 +56,22 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libcodec2_${{ matrix.os }}
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}
+
+      - name: LIST ALL FILES
+        shell: bash
+        run: |
+          ls -R
+
+      - name: RM
+        shell: bash
+        run: |
+          rm -r codec2
+          
+
       - name: Build codec2 Windows ${{ matrix.os }}
         run: |
           git clone https://github.com/drowe67/codec2.git
@@ -69,12 +85,5 @@ jobs:
 
 
 
-      - name: LIST ALL FILES
-        shell: bash
-        run: |
-          ls -R
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: libcodec2_${{ matrix.os }}
-          path: codec2/build/src/${{ matrix.libcodec2_os_name }}
+

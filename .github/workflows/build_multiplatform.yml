@@ -166,10 +166,7 @@ jobs:
         run: |
           ls -al "${PWD}/artifacts"
 
-
       - name: Show the artifact
-        # Items placed in /artifacts in the container will be in
-        # ${PWD}/artifacts on the host.
         run: |
           ls -R /home/runner/work/codec2/codec2/artifacts/
 

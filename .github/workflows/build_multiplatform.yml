@@ -7,22 +7,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest, macOS-latest]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         include:
+          - os: ubuntu-18.04
+            libcodec2_name: libcodec2.so
+            libcodec2_os_name: libcodec2_ubuntu-1804.so
+            generator: Unix Makefiles
+
           - os: ubuntu-20.04
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-2004.so
             generator: Unix Makefiles
 
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_ubuntu-latest.so
+            libcodec2_os_name: libcodec2_ubuntu-2204.so
             generator: Unix Makefiles
 
-          - os: macOS-latest
+          - os: macos-11
             libcodec2_name: libcodec2.dylib
-            libcodec2_os_name: libcodec2_macos.dylib
+            libcodec2_os_name: libcodec2_macos-11.dylib
             generator: Unix Makefiles
+
+          - os: macos-12
+            libcodec2_name: libcodec2.dylib
+            libcodec2_os_name: libcodec2_macos-12.dylib
+            generator: Unix Makefiles
+
 
     steps:
       - name: Build codec2 ${{ matrix.os }}

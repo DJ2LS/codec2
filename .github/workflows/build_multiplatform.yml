@@ -85,6 +85,7 @@ jobs:
 
       - name: CAT
         shell: bash
+        if: always()
         run: |
           ls /codec2/build/
           cat /codec2/build/CMakeFiles/CMakeOutput.log

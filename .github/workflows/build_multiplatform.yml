@@ -157,7 +157,7 @@ jobs:
             cmake ../
             make
             ls -R
-            mv ./src/libcodec2.so.1.0 /artifacts/src/${artifact_name}
+            mv ./src/libcodec2.so.1.0 /artifacts/${artifact_name}
 
       - name: Show the artifact
         # Items placed in /artifacts in the container will be in

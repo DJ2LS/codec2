@@ -94,8 +94,10 @@ jobs:
         include:
           - arch: armv6
             distro: bullseye
+            libcodec2_os_name: libcodec2_bullseye_armv6.so
           - arch: armv7
             distro: ubuntu18.04
+            libcodec2_os_name: libcodec2_ubuntu-1804_armv7.so
 
     steps:
       - uses: actions/checkout@v2.1.0
@@ -173,5 +175,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${artifact_name}
+          name: ${{ libcodec2_os_name }}
           path: /home/runner/work/codec2/codec2/artifacts/*

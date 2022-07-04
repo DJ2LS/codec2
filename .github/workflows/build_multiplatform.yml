@@ -65,7 +65,7 @@ jobs:
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
+      # mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
       - uses: actions/upload-artifact@v3
         with:

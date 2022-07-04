@@ -167,4 +167,4 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${artifact_name}
-          path: ../artifacts/${artifact_name}
+          path: /home/runner/work/codec2/codec2/artifacts/${artifact_name}

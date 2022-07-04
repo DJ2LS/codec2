@@ -79,10 +79,10 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake -CMAKE_SYSTEM_NAME=Windows -CMAKE_C_COMPILER=x86_64-w64-mingw32-gcc -CMAKE_FIND_ROOT_PATH="/usr/x86_64-w64-mingw32" -CMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++ -CMAKE_SHARED_LINKER_FLAGS="-static-libgcc, -static-libstdc++, -static" ../
+          cmake -CMAKE_SYSTEM_NAME=Windows -CMAKE_C_COMPILER=x86_64-w64-mingw32-gcc -CMAKE_FIND_ROOT_PATH="/usr/x86_64-w64-mingw32" -CMAKE_CXX_COMPILER=x86_64-w64-mingw32-g++  ../
           make
           ls -R
-
+      # -CMAKE_SHARED_LINKER_FLAGS="-static-libgcc, -static-libstdc++, -static"
       - name: CAT
         shell: bash
         if: always()

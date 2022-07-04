@@ -1,0 +1,28 @@
+name: Build_Multiplatform
+on: [push]
+
+jobs:
+  build_linux_release:
+    name: Build Linux release
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        include:
+          - os: ubuntu-20.04
+            zip_name: ubuntu_tnc
+            generator: Unix Makefiles
+
+    steps:
+      - name: Build codec2 Linux
+        if: matrix.os == 'ubuntu-20.04'
+        run: |
+          git clone https://github.com/drowe67/codec2.git
+          cd codec2 && git checkout master && mkdir build_linux && cd build_linux
+          cmake ../
+          make
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact-linux
+          path: path/to/artifact/world.txt

@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-20.04, ubuntu-latest, macOS-latest]
         include:
           - os: ubuntu-20.04
             zip_name: ubuntu_tnc
@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Build codec2 Linux
-        if: matrix.os == 'ubuntu-20.04'
+        # if: matrix.os == 'ubuntu-20.04'
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
@@ -33,5 +33,5 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: my-artifact-linux
+          name: libcodec2_${{ matrix.os }}
           path: codec2/build/src/libcodec2_${{ matrix.os }}.so

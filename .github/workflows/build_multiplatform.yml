@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   build_linux_release:
-    name: Build Linux release
+    name: Build ${{ matrix.os }} release
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -14,7 +14,7 @@ jobs:
             generator: Unix Makefiles
 
     steps:
-      - name: Build codec2 Linux
+      - name: Build codec2 ${{ matrix.os }}
         # if: matrix.os == 'ubuntu-20.04'
         run: |
           git clone https://github.com/drowe67/codec2.git
@@ -24,7 +24,7 @@ jobs:
           cd build
           cmake ../
           make
-          mv src/libcodec2.so src/libcodec2_${{ matrix.os }}.so
+          mv src/libcodec2.* src/libcodec2_${{ matrix.os }}.*
 
       - name: LIST ALL FILES
         shell: bash

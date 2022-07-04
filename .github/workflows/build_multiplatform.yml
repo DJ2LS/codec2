@@ -10,12 +10,22 @@ jobs:
         os: [ubuntu-20.04, ubuntu-latest, macOS-latest]
         include:
           - os: ubuntu-20.04
-            zip_name: ubuntu_tnc
+            libcodec2_name: libcodec2.so
+            libcodec2_os_name: libcodec2_${{ matrix.os }}.so
+            generator: Unix Makefiles
+
+          - os: ubuntu-latest
+            libcodec2_name: libcodec2.so
+            libcodec2_os_name: libcodec2_${{ matrix.os }}.so
+            generator: Unix Makefiles
+
+          - os: macOS-latest
+            libcodec2_name: libcodec2.dylib
+            libcodec2_os_name: libcodec2_${{ matrix.os }}.dylib
             generator: Unix Makefiles
 
     steps:
       - name: Build codec2 ${{ matrix.os }}
-        # if: matrix.os == 'ubuntu-20.04'
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
@@ -24,7 +34,7 @@ jobs:
           cd build
           cmake ../
           make
-          mv src/libcodec2.* src/libcodec2_${{ matrix.os }}.*
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
       - name: LIST ALL FILES
         shell: bash

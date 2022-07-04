@@ -56,6 +56,19 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
+      - name: Build codec2 Windows ${{ matrix.os }}
+        run: |
+          git clone https://github.com/drowe67/codec2.git
+          cd codec2
+          git checkout master
+          mkdir build
+          cd build
+          cmake -CMAKE_SYSTEM_NAME=Windows -TOOLCHAIN_PREFIX i686-w64-mingw32 -CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static" ../
+          make
+          ls -R
+
+
+
       - name: LIST ALL FILES
         shell: bash
         run: |

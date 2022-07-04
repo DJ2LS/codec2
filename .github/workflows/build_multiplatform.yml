@@ -87,7 +87,7 @@ jobs:
         shell: bash
         if: always()
         run: |
-          ls /codec2/build/
+          ls -R
           cat /codec2/build/CMakeFiles/CMakeOutput.log
 
 

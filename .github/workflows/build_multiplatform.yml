@@ -6,6 +6,7 @@ jobs:
     name: Build ${{ matrix.os }} x64_i686
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12, windows-2019, windows-2022]
         include:

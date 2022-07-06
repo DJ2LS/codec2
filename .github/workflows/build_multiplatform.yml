@@ -97,6 +97,9 @@ jobs:
             distro: bullseye
             libcodec2_os_name: libcodec2_bullseye_armv6.so
           - arch: armv7
+            distro: bullseye
+            libcodec2_os_name: libcodec2_ubuntu-bullseye_armv7.so
+          - arch: armv7
             distro: ubuntu18.04
             libcodec2_os_name: libcodec2_ubuntu-1804_armv7.so
 
@@ -291,8 +294,13 @@ jobs:
             path: .
             #exclusions: '*.git* /*node_modules/* .editorconfig'
 
+      - name: LIST ALL FILES
+        shell: bash
+        run: |
+          ls -R
+
       - name: Upload TNC artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: tnc-artifact
           path: ./tnc/dist/${{ matrix.zip_name }}.zip

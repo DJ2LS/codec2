@@ -275,12 +275,12 @@ jobs:
         run: |
           ls -R
 
-      - name: Compress TNC
-        # if: ${{!startsWith(matrix.os, 'windows') }}
-        shell: bash
-        run: |
-          cd ./tnc/dist
-          zip -r ./${{ matrix.zip_name }}.zip *
+      #- name: Compress TNC
+      #  # if: ${{!startsWith(matrix.os, 'windows') }}
+      #  shell: bash
+      #  run: |
+      #    cd ./tnc/dist
+      #    zip -r ./${{ matrix.zip_name }}.zip *
 
       - name: Compress TNC
         uses: thedoctor0/zip-release@master

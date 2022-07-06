@@ -202,10 +202,10 @@ jobs:
           repository: DJ2LS/FreeDATA
           ref: main
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Install Linux dependencies
         if: matrix.os == 'ubuntu-20.04'
@@ -270,6 +270,8 @@ jobs:
           cd codec2
 
       - uses: actions/download-artifact@v3
+        with:
+          path: tnc/lib/codec2
 
       # here we have to unzip all artifacts
 
@@ -287,21 +289,21 @@ jobs:
           ls -R
 
       - name: Compress TNC Linux/Unix
-        if: matrix.os == 'ubuntu-20.04'
+        # if: ${{!startsWith(matrix.os, 'windows') }}
         shell: bash
         run: |
           cd ./tnc/dist
           zip -r ./${{ matrix.zip_name }}.zip *
 
-      - name: Compress TNC Windows
-        if: matrix.os == 'windows-latest'
-        uses: thedoctor0/zip-release@master
-        with:
-            type: 'zip'
-            filename: '${{ matrix.zip_name }}.zip'
-            directory: ./tnc/dist/tnc
-            path: .
-            #exclusions: '*.git* /*node_modules/* .editorconfig'
+      #- name: Compress TNC Windows
+      #  if: matrix.os == 'windows-latest'
+      #  uses: thedoctor0/zip-release@master
+      #  with:
+      #      type: 'zip'
+      #      filename: '${{ matrix.zip_name }}.zip'
+      #      directory: ./tnc/dist/tnc
+      #      path: .
+      #      #exclusions: '*.git* /*node_modules/* .editorconfig'
 
       - name: Upload TNC artifacts
         uses: actions/upload-artifact@v2

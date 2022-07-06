@@ -67,13 +67,13 @@ jobs:
         if: ${{startsWith(matrix.os, 'windows') }}
         uses: egor-tensin/setup-mingw@v2
         with:
-          platform: x64
+          platform: x86
           static: 1
 
       - name: Build codec2 ${{ matrix.os }} x64
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
-          ls -R C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin
+          ls -R C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw32/bin
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           git checkout master

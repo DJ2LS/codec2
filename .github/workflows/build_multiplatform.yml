@@ -255,12 +255,16 @@ jobs:
         with:
           path: tnc/lib/codec2
 
-      # here we have to unzip all artifacts
+
+      - name: cleanup codec2
+        working-directory: tnc/lib/codec2
+        run: |
+          ls -R
+          
 
       - name: Unzip all artifacts
         working-directory: tnc/lib/codec2
         run: unzip *.zip
-
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -275,7 +279,7 @@ jobs:
         run: |
           ls -R
 
-      - name: Compress TNC Linux/Unix
+      - name: Compress TNC
         # if: ${{!startsWith(matrix.os, 'windows') }}
         shell: bash
         run: |

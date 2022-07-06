@@ -169,8 +169,8 @@ jobs:
 
       - name: Show the artifact
         run: |
-          ls -R $HOME
-          ls -R /home/runner/work/codec2/codec2/artifacts/
+          ls -R $GITHUB_WORKSPACE
+          ls -R $GITHUB_WORKSPACE/codec2/codec2/artifacts/
 
       - uses: actions/upload-artifact@v3
         with:

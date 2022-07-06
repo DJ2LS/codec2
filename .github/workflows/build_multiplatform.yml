@@ -8,47 +8,60 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        platform: [x86, x64]
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12, windows-2019, windows-2022]
         include:
           - os: ubuntu-18.04
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_ubuntu-1804_x64_i686.so
+            libcodec2_os_name: libcodec2_ubuntu-1804
+            libcodec2_filetype: so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-20.04
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_ubuntu-2004_x64_i686.so
+            libcodec2_os_name: libcodec2_ubuntu-2004
+            libcodec2_filetype: so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-22.04
             libcodec2_name: libcodec2.so
-            libcodec2_os_name: libcodec2_ubuntu-2204_x64_i686.so
+            libcodec2_os_name: libcodec2_ubuntu-2204
+            libcodec2_filetype: so
             generator: Unix Makefiles
             shell: bash
 
           - os: macos-11
             libcodec2_name: libcodec2.dylib
-            libcodec2_os_name: libcodec2_macos-11_x64_i686.dylib
+            libcodec2_os_name: libcodec2_macos-11
+            libcodec2_filetype: dylib
             generator: Unix Makefiles
             shell: bash
 
           - os: macos-12
             libcodec2_name: libcodec2.dylib
-            libcodec2_os_name: libcodec2_macos-12_x64_i686.dylib
+            libcodec2_os_name: libcodec2_macos-12
+            libcodec2_filetype: dylib
             generator: Unix Makefiles
             shell: bash
 
           - os: windows-2019
             libcodec2_name: libcodec2.dll
-            libcodec2_os_name: libcodec2_windows-2019_x64.dll
-            libcodec2_os_name_i32: libcodec2_windows-2019_i32.dll
-
+            libcodec2_os_name: libcodec2_windows-2019
+            libcodec2_filetype: dll
           - os: windows-2022
             libcodec2_name: libcodec2.dll
-            libcodec2_os_name: libcodec2_windows-2022_x64.dll
-            libcodec2_os_name_i32: libcodec2_windows-2019_i32.dll
+            libcodec2_filetype: dll
+            libcodec2_os_name: libcodec2_windows-2022_x64
+
+      - name: Setup MinGW
+        if: ${{startsWith(matrix.os, 'windows') }}
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: ${{ matrix.platform }}
+          static: 1
+
 
     steps:
       - name: Build codec2 ${{ matrix.os }} x64_i686
@@ -61,14 +74,9 @@ jobs:
           cd build
           cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
-      - name: Setup MinGW
-        if: ${{startsWith(matrix.os, 'windows') }}
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: x86
-          static: 1
+
 
       - name: Build codec2 ${{ matrix.os }} x86
         if: ${{startsWith(matrix.os, 'windows') }}
@@ -79,15 +87,16 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          #cmake -G "MinGW Makefiles" ../
+          # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
+          # cmake -G "MinGW Makefiles" ../
+          cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
       - uses: actions/upload-artifact@v3
         with:
-          name: libcodec2_${{ matrix.os }}
-          path: codec2/build/src/${{ matrix.libcodec2_os_name }}
+          name: ${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
       - name: LIST ALL FILES
         shell: bash

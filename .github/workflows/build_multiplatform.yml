@@ -178,7 +178,7 @@ jobs:
 
   build_i686_x64_release:
     needs: [BUILD_ON_AMD64]
-    name: Build FreeDATA Linux/Unix releases
+    name: Build FreeDATA
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -260,7 +260,8 @@ jobs:
         working-directory: tnc/lib/codec2
         run: |
           ls -R
-          unzip *.zip
+          ls -l
+          # unzip *.zip
 
       - name: Display structure of downloaded files
         run: ls -R

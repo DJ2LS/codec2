@@ -302,8 +302,8 @@ jobs:
       - name: Upload TNC artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: tnc-artifact
-          path: ./tnc/dist/${{ matrix.zip_name }}.zip
+          name: ${{ matrix.zip_name }}.zip
+          path: ./tnc/dist/tnc/${{ matrix.zip_name }}.zip
 
       - name: Copy TNC to GUI Linux
         run: |

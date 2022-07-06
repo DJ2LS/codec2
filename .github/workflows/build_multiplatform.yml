@@ -260,8 +260,7 @@ jobs:
       - name: Unzip all artifacts
         working-directory: tnc/lib/codec2
         run: |
-          ls -R
-          ls -l
+          ls -R -L
           # unzip *.zip
 
       - name: Display structure of downloaded files

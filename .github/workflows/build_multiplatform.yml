@@ -14,45 +14,45 @@ jobs:
           - os: ubuntu-18.04
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-1804
-            libcodec2_filetype: so
+            libcodec2_filetype: .so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-20.04
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-2004
-            libcodec2_filetype: so
+            libcodec2_filetype: .so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-22.04
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-2204
-            libcodec2_filetype: so
+            libcodec2_filetype: .so
             generator: Unix Makefiles
             shell: bash
 
           - os: macos-11
             libcodec2_name: libcodec2.dylib
             libcodec2_os_name: libcodec2_macos-11
-            libcodec2_filetype: dylib
+            libcodec2_filetype: .dylib
             generator: Unix Makefiles
             shell: bash
 
           - os: macos-12
             libcodec2_name: libcodec2.dylib
             libcodec2_os_name: libcodec2_macos-12
-            libcodec2_filetype: dylib
+            libcodec2_filetype: .dylib
             generator: Unix Makefiles
             shell: bash
 
           - os: windows-2019
             libcodec2_name: libcodec2.dll
             libcodec2_os_name: libcodec2_windows-2019
-            libcodec2_filetype: dll
+            libcodec2_filetype: .dll
           - os: windows-2022
             libcodec2_name: libcodec2.dll
-            libcodec2_filetype: dll
+            libcodec2_filetype: .dll
             libcodec2_os_name: libcodec2_windows-2022_x64
 
 
@@ -93,8 +93,8 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          # cmake -G "MinGW Makefiles" ../       
+          # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
+          cmake -G "MinGW Makefiles" ../       
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 

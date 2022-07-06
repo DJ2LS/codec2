@@ -72,7 +72,7 @@ jobs:
           mkdir build
           cd build
           # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          cmake -G "MinGW Makefiles" ../
+          cmake -G "MinGW Makefiles" -D CMAKE_SHARED_LINKER_FLAGS="-static-libgcc;-static-libstdc++;-static" ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
@@ -168,11 +168,6 @@ jobs:
         # ${PWD}/artifacts on the host.
         run: |
           ls -al "${PWD}/artifacts"
-
-      - name: Show the artifact
-        run: |
-          ls -R $GITHUB_WORKSPACE
-          ls -R $GITHUB_WORKSPACE/codec2/artifacts/
 
       - uses: actions/upload-artifact@v3
         with:

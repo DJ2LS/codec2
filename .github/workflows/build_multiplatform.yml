@@ -93,9 +93,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - arch: armv6
-            distro: bullseye
-            libcodec2_os_name: libcodec2_bullseye_armv6.so
           - arch: armv7
             distro: bullseye
             libcodec2_os_name: libcodec2_ubuntu-bullseye_armv7.so
@@ -172,6 +169,7 @@ jobs:
 
       - name: Show the artifact
         run: |
+          ls -R $HOME
           ls -R /home/runner/work/codec2/codec2/artifacts/
 
       - uses: actions/upload-artifact@v3
@@ -180,7 +178,7 @@ jobs:
           path: /home/runner/work/codec2/codec2/artifacts/*
 
   build_i686_x64_release:
-    needs: [BUILD_ON_AMD64]
+    needs: [BUILD_ON_MULTIARCH, BUILD_ON_AMD64]
     name: Build FreeDATA
     runs-on: ${{ matrix.os }}
     strategy:

@@ -42,12 +42,13 @@ jobs:
 
           - os: windows-2019
             libcodec2_name: libcodec2.dll
-            libcodec2_os_name: libcodec2_windows-2019_x64_i686.dll
+            libcodec2_os_name: libcodec2_windows-2019_x64.dll
+            libcodec2_os_name_i32: libcodec2_windows-2019_i32.dll
 
           - os: windows-2022
             libcodec2_name: libcodec2.dll
-            libcodec2_os_name: libcodec2_windows-2022_x64_i686.dll
-
+            libcodec2_os_name: libcodec2_windows-2022_x64.dll
+            libcodec2_os_name_i32: libcodec2_windows-2019_i32.dll
 
     steps:
       - name: Build codec2 ${{ matrix.os }} x64_i686
@@ -71,7 +72,7 @@ jobs:
           mkdir build
           cd build
           # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          cmake -G "Visual Studio 16 2019" -A Win32 ../
+          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe -A Win32 ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 

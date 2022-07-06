@@ -88,7 +88,7 @@ jobs:
       - name: Build codec2 ${{ matrix.os }} x64
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
-          ls -R C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw64/bin
+          # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           git checkout master

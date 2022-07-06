@@ -319,7 +319,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/v')
         with:
-          files: ./tnc/dist/${{ matrix.zip_name }}.zip
+          files: ./tnc/dist/tnc/${{ matrix.zip_name }}.zip
 
 
       - name: Build/release Electron app

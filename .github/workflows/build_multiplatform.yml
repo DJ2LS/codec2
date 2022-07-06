@@ -63,12 +63,15 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
-
-      - name: Build codec2 ${{ matrix.os }} x64
+      - name: Setup MinGW
         if: ${{startsWith(matrix.os, 'windows') }}
         uses: egor-tensin/setup-mingw@v2
         with:
           platform: x64
+          static: 1
+
+      - name: Build codec2 ${{ matrix.os }} x64
+        if: ${{startsWith(matrix.os, 'windows') }}
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2

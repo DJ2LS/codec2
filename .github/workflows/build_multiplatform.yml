@@ -70,7 +70,7 @@ jobs:
           platform: x86
           static: 1
 
-      - name: Build codec2 ${{ matrix.os }} x64
+      - name: Build codec2 ${{ matrix.os }} x86
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
           ls -R C:/ProgramData/chocolatey/lib/mingw/tools/install/mingw32/bin
@@ -79,8 +79,8 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          cmake -G "MinGW Makefiles" ../
+          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
+          #cmake -G "MinGW Makefiles" ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 

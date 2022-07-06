@@ -256,15 +256,11 @@ jobs:
           path: tnc/lib/codec2
 
 
-      - name: cleanup codec2
+      - name: Unzip all artifacts
         working-directory: tnc/lib/codec2
         run: |
           ls -R
-          
-
-      - name: Unzip all artifacts
-        working-directory: tnc/lib/codec2
-        run: unzip *.zip
+          unzip *.zip
 
       - name: Display structure of downloaded files
         run: ls -R

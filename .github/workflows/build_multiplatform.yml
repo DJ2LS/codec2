@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   BUILD_ON_AMD64:
-    name: Build ${{ matrix.os }} x64_i686
+    name: Build codec2 ${{ matrix.os }} x64_i686
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -257,11 +257,10 @@ jobs:
           path: tnc/lib/codec2
 
 
-      - name: Unzip all artifacts
-        working-directory: tnc/lib/codec2
-        run: |
-          ls -R -L
-          # unzip *.zip
+      # - name: Unzip all artifacts
+      #  working-directory: tnc/lib/codec2
+      #  run: |
+      #    unzip *.zip
 
       - name: Display structure of downloaded files
         run: ls -R

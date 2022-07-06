@@ -71,8 +71,7 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe -D CMAKE_GENERATOR_PLATFORM=Win32 ../
+          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 

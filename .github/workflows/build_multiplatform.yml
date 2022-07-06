@@ -206,6 +206,7 @@ jobs:
         base_image: ${{ matrix.base_image }}
         cpu: ${{ matrix.cpu }}
         cpu_info: ${{ matrix.cpu_info }}
+        copy_artifact_path: artifacts
         commands: |
             test `uname -m` = ${{ matrix.arch }}
             grep Model /proc/cpuinfo
@@ -216,24 +217,15 @@ jobs:
             cd build
             cmake ../
             make
-            mv ./src/libcodec2.so.1.0 /artifacts/${artifact_name}
+            mv ./src/libcodec2.so.1.0 ./src/${artifact_name}
+            touch ./src/${artifact_name}
 
       - name: Show the artifact
         # Items placed in /artifacts in the container will be in
         # ${PWD}/artifacts on the host.
         run: |
-          ls -al "${PWD}/artifacts"
+          ls -l artifacts
 
-      - name: Show the artifact
-        run: |
-          ls -R /home/runner/work/codec2/codec2/artifacts/
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.libcodec2_os_name }}
-          path: /home/runner/work/codec2/codec2/artifacts/*
-          
-          
 
   build_i686_x64_release:
     needs: [BUILD_ON_AMD64]

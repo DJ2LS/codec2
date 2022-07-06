@@ -267,9 +267,9 @@ jobs:
         run: |
           rm -r codec2
           mkdir codec2
+          cd codec2
 
       - uses: actions/download-artifact@v3
-        working-directory: tnc/lib/codec2
 
       # here we have to unzip all artifacts
 

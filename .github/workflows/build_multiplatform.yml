@@ -203,8 +203,6 @@ jobs:
           cpu_info: ${{ matrix.cpu_info }}
           copy_artifact_path: artifacts
           commands: |
-              test `uname -m` = ${{ matrix.arch }}
-              grep Model /proc/cpuinfo
               git clone https://github.com/drowe67/codec2.git
               cd codec2
               git checkout master

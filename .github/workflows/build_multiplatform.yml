@@ -59,6 +59,9 @@ jobs:
 
 
     steps:
+      - name: Clean up PATH
+        uses: egor-tensin/cleanup-path@v1
+        if: runner.os == 'Windows'
       - name: Setup MinGW
         uses: egor-tensin/setup-mingw@v2
         with:

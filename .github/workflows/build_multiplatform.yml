@@ -63,6 +63,10 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 
+
+      - name: find mingw header files
+        run: |
+          ls -R /
       - name: Build codec2 ${{ matrix.os }} x64_i686
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
@@ -72,7 +76,7 @@ jobs:
           mkdir build
           cd build
           # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          cmake -G "MinGW Makefiles" -static-libgcc -static-libstdc++ -static ../
+          cmake -G "MinGW Makefiles" ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}
 

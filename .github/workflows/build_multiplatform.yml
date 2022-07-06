@@ -179,6 +179,61 @@ jobs:
           name: ${{ matrix.libcodec2_os_name }}
           path: /home/runner/work/codec2/codec2/artifacts/*
 
+  ARM:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch: [armv6l, armv7l, aarch64]
+        include:
+        - arch: armv6l
+          cpu: arm1176
+          base_image: raspios_lite:latest
+          cpu_info: raspberrypi_zero_w
+          libcodec2_os_name: libcodec2_bullseye_arm1176.so
+        - arch: armv7l
+          cpu: cortex-a7
+          base_image: raspios_lite:latest
+          cpu_info: raspberrypi_3b
+          libcodec2_os_name: libcodec2_bullseye_cortex-a7.so
+        - arch: aarch64
+          cpu: cortex-a53
+          base_image: raspios_lite_arm64:latest
+          cpu_info: raspberrypi_zero2_w_arm64_w
+          libcodec2_os_name: libcodec2_bullseye_cortex-a53.so
+    steps:
+    - uses: pguyot/arm-runner-action@v2
+      with:
+        base_image: ${{ matrix.base_image }}
+        cpu: ${{ matrix.cpu }}
+        cpu_info: ${{ matrix.cpu_info }}
+        commands: |
+            test `uname -m` = ${{ matrix.arch }}
+            grep Model /proc/cpuinfo
+            git clone https://github.com/drowe67/codec2.git
+            cd codec2
+            git checkout master
+            mkdir build
+            cd build
+            cmake ../
+            make
+            mv ./src/libcodec2.so.1.0 /artifacts/${artifact_name}
+
+      - name: Show the artifact
+        # Items placed in /artifacts in the container will be in
+        # ${PWD}/artifacts on the host.
+        run: |
+          ls -al "${PWD}/artifacts"
+
+      - name: Show the artifact
+        run: |
+          ls -R /home/runner/work/codec2/codec2/artifacts/
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.libcodec2_os_name }}
+          path: /home/runner/work/codec2/codec2/artifacts/*
+          
+          
 
   build_i686_x64_release:
     needs: [BUILD_ON_AMD64]

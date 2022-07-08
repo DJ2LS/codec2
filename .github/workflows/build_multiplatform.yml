@@ -84,15 +84,13 @@ jobs:
 
         # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: Build codec2 win ${{ matrix.os }}
-        if: |
-          ${{ startsWith(matrix.os, 'windows') }}
+        if: ${{startsWith(matrix.os, 'windows') }}
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          # cmake -G "MinGW Makefiles" ../       
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
           rm -r *

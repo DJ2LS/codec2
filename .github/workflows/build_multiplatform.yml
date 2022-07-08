@@ -86,6 +86,7 @@ jobs:
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
+          echo "set(CMAKE_SHARED_LINKER_FLAGS '-static-libgcc -static-libstdc++ -static'") >> CMakeLists.txt
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" -D CMAKE_EXE_LINKER_FLAGS=-static-libgcc;-static-libstdc++;-static -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../

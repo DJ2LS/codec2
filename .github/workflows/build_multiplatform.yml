@@ -77,8 +77,8 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake ../
-          # cmake -G "Unix Makefiles" ../
+          # cmake ../
+          cmake -G "x86_64-w64-mingw32" ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 

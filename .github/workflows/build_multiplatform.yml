@@ -93,8 +93,10 @@ jobs:
           cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
           # cmake -G "MinGW Makefiles" ../       
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
+          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
+          make
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x64_${{ matrix.libcodec2_filetype }}
 
       - uses: actions/upload-artifact@v3
         with:

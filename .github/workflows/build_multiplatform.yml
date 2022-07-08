@@ -74,15 +74,7 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
-      #- name: Setup MinGW Windows
-      #  if: ${{ startsWith(matrix.os, 'windows') }}
-      #  uses: egor-tensin/setup-mingw@v2
-      #  with:
-      #    platform: ${{ matrix.platform }}
-      #    static: 1
-      #    cc: 1
-
-        # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
+      # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: LIST MINGW
           if: ${{startsWith(matrix.os, 'windows') }}
           run: |

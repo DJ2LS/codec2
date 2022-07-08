@@ -94,7 +94,8 @@ jobs:
           mkdir build
           cd build
           # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          cmake -G "MinGW Makefiles" ../       
+          # cmake -G "MinGW Makefiles" ../       
+          cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
@@ -109,7 +110,8 @@ jobs:
           mkdir build
           cd build
           # cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          cmake -G "MinGW Makefiles" ../       
+          # cmake -G "MinGW Makefiles" ../   
+          cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 

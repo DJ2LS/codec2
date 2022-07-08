@@ -83,6 +83,13 @@ jobs:
       #    cc: 1
 
         # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
+      - name: LIST MINGW
+          if: ${{startsWith(matrix.os, 'windows') }}
+          run: |
+            ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\
+            ls -R C:\
+        
+
       - name: Build codec2 win ${{ matrix.os }}
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
@@ -94,9 +101,6 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
           rm -r *
-          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x64_${{ matrix.libcodec2_filetype }}
 
       - uses: actions/upload-artifact@v3
         with:

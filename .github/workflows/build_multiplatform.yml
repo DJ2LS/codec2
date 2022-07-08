@@ -67,12 +67,11 @@ jobs:
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
-          git checkout master
           mkdir build
           cd build
           cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       #- name: Setup MinGW Windows
       #  if: ${{ startsWith(matrix.os, 'windows') }}
@@ -95,13 +94,13 @@ jobs:
           cmake -G "MinGW Makefiles" ../       
           # cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
 
       - uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
-          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
+          name: ${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       - name: LIST ALL FILES
         shell: bash

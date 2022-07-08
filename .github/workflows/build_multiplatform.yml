@@ -70,6 +70,7 @@ jobs:
       - name: Build codec2 ${{ matrix.os }} ${{ matrix.platform }}
         if: ${{!startsWith(matrix.os, 'windows') }}
         run: |
+          rm -r codec2
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           git checkout master
@@ -82,15 +83,10 @@ jobs:
 
         # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: Build codec2 ${{ matrix.os }} x86
-        #if: ${{startsWith(matrix.os, 'windows') }}
-        #if: |
-        #  ${{ github.event_name == 'push'
-        #      || ( github.event_name == 'workflow_run'
-        #           && github.event.workflow_run.conclusion == 'success'
-        #         ) }}
         if: |
           ${{ startsWith(matrix.os, 'windows') && matrix.platform == 'x86' }}
         run: |
+          rm -r codec2
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           git checkout master
@@ -105,6 +101,7 @@ jobs:
         if: |
           ${{ startsWith(matrix.os, 'windows') && matrix.platform == 'x64' }}
         run: |
+          rm -r codec2
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           git checkout master

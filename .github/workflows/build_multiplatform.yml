@@ -60,7 +60,7 @@ jobs:
 
     steps:
       - name: Setup MinGW
-        if: ${{startsWith(matrix.os, 'windows') }}
+        #if: ${{startsWith(matrix.os, 'windows') }}
         uses: egor-tensin/setup-mingw@v2
         with:
           platform: ${{ matrix.platform }}
@@ -83,7 +83,7 @@ jobs:
 
 
         # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
-      - name: Build codec2 ${{ matrix.os }} x86
+      - name: Build codec2 win ${{ matrix.os }} x86
         if: |
           ${{ startsWith(matrix.os, 'windows') && matrix.platform == 'x86' }}
         run: |
@@ -98,7 +98,7 @@ jobs:
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
-      - name: Build codec2 ${{ matrix.os }} x64
+      - name: Build codec2 win ${{ matrix.os }} x64
         if: |
           ${{ startsWith(matrix.os, 'windows') && matrix.platform == 'x64' }}
         run: |

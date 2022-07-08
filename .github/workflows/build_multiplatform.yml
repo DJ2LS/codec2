@@ -76,7 +76,8 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          cmake ../
+          # cmake ../
+          cmake -G "MinGW Makefiles" ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 

@@ -65,6 +65,7 @@ jobs:
         with:
           platform: ${{ matrix.platform }}
           static: 1
+          cc: 1
 
 
       - name: Build codec2 ${{ matrix.os }}

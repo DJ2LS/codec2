@@ -78,7 +78,7 @@ jobs:
       - name: LIST MINGW
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
-            ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\bin
+            ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
         
 
       - name: Build codec2 win ${{ matrix.os }}

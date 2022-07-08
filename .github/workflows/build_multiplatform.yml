@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   BUILD_ON_AMD64:
-    name: Build codec2 ${{ matrix.os }} x64_i686
+    name: Build codec2 ${{ matrix.os }} x64
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -75,10 +75,10 @@ jobs:
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
-      - name: LIST MINGW
-        if: ${{startsWith(matrix.os, 'windows') }}
-        run: |
-            ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\
+      #- name: LIST MINGW
+      #  if: ${{startsWith(matrix.os, 'windows') }}
+      #  run: |
+      #      ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\
         
 
       - name: Build codec2 win ${{ matrix.os }}
@@ -88,15 +88,15 @@ jobs:
           cd codec2
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
+          cmake -G "MinGW Makefiles" -D CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
+          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           rm -r *
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       - name: LIST ALL FILES
         shell: bash

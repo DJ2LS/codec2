@@ -76,8 +76,8 @@ jobs:
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: LIST MINGW
-          if: ${{startsWith(matrix.os, 'windows') }}
-          run: |
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
             ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\
             ls -R C:\
         

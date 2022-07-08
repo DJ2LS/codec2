@@ -58,15 +58,9 @@ jobs:
 
 
 
-    steps:
-      - name: Setup MinGW
-        if: ${{ startsWith(matrix.os, 'windows') || startsWith(matrix.os, 'ubuntu') }}
-        uses: egor-tensin/setup-mingw@v2
-        with:
-          platform: ${{ matrix.platform }}
-          static: 1
-          cc: 1
 
+
+    steps:
 
       - name: Build codec2 ${{ matrix.os }}
         if: ${{!startsWith(matrix.os, 'windows') }}
@@ -77,11 +71,17 @@ jobs:
           git checkout master
           mkdir build
           cd build
-          # cmake ../
-          cmake -G "x86_64-w64-mingw32" ../
+          cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.platform }}_${{ matrix.libcodec2_filetype }}
 
+      - name: Setup MinGW Windows
+        if: ${{ startsWith(matrix.os, 'windows') }}
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: ${{ matrix.platform }}
+          static: 1
+          cc: 1
 
         # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: Build codec2 win ${{ matrix.os }} x86

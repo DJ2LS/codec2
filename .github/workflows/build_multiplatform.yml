@@ -62,13 +62,20 @@ jobs:
 
     steps:
 
+      - name: Checkout codec2
+        uses: actions/checkout@v3
+        with:
+          repository: drowe67/codec2
+          ref: main
+
+
       - name: Build codec2 ${{ matrix.os }}
         if: ${{!startsWith(matrix.os, 'windows') }}
         run: |
-          rm -r -f codec2
+          #rm -r -f codec2
           git clone https://github.com/drowe67/codec2.git
           cd codec2
-          git checkout master
+          #git checkout master
           mkdir build
           cd build
           cmake ../

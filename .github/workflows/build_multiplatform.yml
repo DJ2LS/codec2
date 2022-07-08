@@ -75,10 +75,10 @@ jobs:
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
-      #- name: LIST MINGW
-      #  if: ${{startsWith(matrix.os, 'windows') }}
-      #  run: |
-      #      ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\
+      - name: LIST MINGW
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+            ls -R C:\ProgramData\chocolatey\lib\mingw\tools\install\bin
         
 
       - name: Build codec2 win ${{ matrix.os }}

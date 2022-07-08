@@ -72,7 +72,9 @@ jobs:
           cd build
           cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          mkdir tempfiles
+          mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       - name: LIST MINGW

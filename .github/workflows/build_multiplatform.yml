@@ -89,7 +89,7 @@ jobs:
           echo "set(CMAKE_SHARED_LINKER_FLAGS '-static-libgcc -static-libstdc++ -static')" >> CMakeLists.txt
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" -D CMAKE_EXE_LINKER_FLAGS=-static-libgcc;-static-libstdc++;-static -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
+          cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 

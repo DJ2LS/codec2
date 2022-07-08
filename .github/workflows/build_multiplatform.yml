@@ -91,7 +91,6 @@ jobs:
           cmake -G "MinGW Makefiles" -D CMAKE_EXE_LINKER_FLAGS="-static-libgcc -static" -D CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          rm -r *
 
       - uses: actions/upload-artifact@v3
         with:

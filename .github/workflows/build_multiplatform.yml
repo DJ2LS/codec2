@@ -94,6 +94,7 @@ jobs:
           # cmake -G "MinGW Makefiles" ../       
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x86_${{ matrix.libcodec2_filetype }}
+          rm -r *
           cmake -G "MinGW Makefiles" -D CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
           make
           mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_x64_${{ matrix.libcodec2_filetype }}
@@ -101,7 +102,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          path: codec2/build/src/${{ matrix.libcodec2_os_name }}_*_${{ matrix.libcodec2_filetype }}
 
       - name: LIST ALL FILES
         shell: bash

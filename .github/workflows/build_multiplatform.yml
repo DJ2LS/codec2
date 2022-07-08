@@ -106,7 +106,7 @@ jobs:
         with:
           name: ${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           #path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          path: codec2/build/src/tempfiles/*
+          path: codec2/build/tempfiles/*
 
       - name: LIST ALL FILES
         shell: bash

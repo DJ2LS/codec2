@@ -91,11 +91,11 @@ jobs:
       - uses: msys2/setup-msys2@v2
         if: ${{startsWith(matrix.os, 'windows') }}
         with:
-          msystem: MINGW64
+          msystem: MINGW32
           location: D:\msys2\mingw64\
           install: >-
-            mingw-w64-i686-toolchain
-            mingw-w64-i686-make 
+            mingw-w32-i686-toolchain
+            mingw-w32-i686-make 
 
       # D:/a/codec2/codec2/codec2/build
       - name: TEST BUILD i686

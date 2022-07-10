@@ -85,9 +85,7 @@ jobs:
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" ../
-          # make
-          mingw-w64-x86_64-make
-
+          make
 
       #- name: cleanup msys2
       #  if: ${{startsWith(matrix.os, 'windows') }}
@@ -112,8 +110,7 @@ jobs:
           mkdir build
           cd build
           cmake -G "MinGW Makefiles" ../
-          # make  
-          mingw-w64-i686-make
+          make  
 
       - name: Build codec2 ${{ matrix.os }}
         #working-directory: codec2

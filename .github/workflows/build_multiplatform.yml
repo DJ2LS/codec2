@@ -81,7 +81,7 @@ jobs:
           cd codec2
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" ../
+          cmake -G Ninja ../
           make
           
 

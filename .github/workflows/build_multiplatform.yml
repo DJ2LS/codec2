@@ -130,7 +130,7 @@ jobs:
       #    #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
       #    mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
-      - name: Create cmake i686 toolchain
+      - name: Create Windows mingw i686 build
         if: ${{startsWith(matrix.os, 'ubuntu') }}
         run: |
           # rm -r -f codec2
@@ -148,14 +148,9 @@ jobs:
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain-ubuntu-mingw.cmake
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain-ubuntu-mingw.cmake
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw.cmake
-          ls -R
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw.cmake ..
           make
-          ls -R
-          mv src/libcodec2.so tempfiles/libcodec2_i686.dll
-    
-
-
+          mv src/libcodec2.so tempfiles/libcodec2_${{ matrix.libcodec2_os_name }}_i686.dll
 
 
 

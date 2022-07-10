@@ -82,6 +82,7 @@ jobs:
           cd build
           cmake -G "MinGW Makefiles" ../
           make
+          mkdir tempfiles
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_x64_${{ matrix.libcodec2_filetype }}          
           mv "D:\msys2\mingw64\msys64\mingw64\bin\libatomic-1.dll" "tempfiles/libatomic-1.dll"
           mv "D:\msys2\mingw64\msys64\mingw64\bin\libgcc_s_seh-1.dll" "tempfiles/libgcc_s_seh-1.dll"
@@ -112,6 +113,7 @@ jobs:
           cd build
           cmake -G "MinGW Makefiles" ../
           make
+          mkdir tempfiles
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_i686_${{ matrix.libcodec2_filetype }}
 
       - name: Build codec2 ${{ matrix.os }}
@@ -126,7 +128,6 @@ jobs:
           cmake ../
           make
           #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          mkdir tempfiles
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin

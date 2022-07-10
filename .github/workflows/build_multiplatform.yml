@@ -61,6 +61,31 @@ jobs:
 
 
     steps:
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          location: D:\msys2\mingw64\
+
+      - name: SHOW MSYS2 MINGW64
+        #working-directory: codec2
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+          ls -R D:\msys2\
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW32
+          location: D:\msys2\mingw32\
+
+      - name: SHOW MSYS2 MINGW32
+        #working-directory: codec2
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+          ls -R D:\msys2\
+          
+          
+
       - name: Build codec2 ${{ matrix.os }}
         #working-directory: codec2
         if: ${{!startsWith(matrix.os, 'windows') }}

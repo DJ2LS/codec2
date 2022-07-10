@@ -155,7 +155,7 @@ jobs:
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain-ubuntu-mingw.cmake
           echo "# add static libgcc libraries so there are no additional dependencies" >> toolchain-ubuntu-mingw.cmake
           echo "set(CMAKE_SHARED_LINKER_FLAGS '-static-libgcc -static-libstdc++ -static')" >> toolchain-ubuntu-mingw.cmake
-          cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw.cmake ..
+          cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw.cmake ../
           make
           mv src/libcodec2.so tempfiles/libcodec2_i686.dll
     

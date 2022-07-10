@@ -139,11 +139,10 @@ jobs:
           mkdir build
           cd build
           echo "set(CMAKE_SYSTEM_NAME Windows)" > toolchain-ubuntu-mingw.cmake
-          echo "set(TOOLCHAIN_PREFIX i686-w64-mingw32)" >> toolchain-ubuntu-mingw.cmake     
-          echo "set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)" >> toolchain-ubuntu-mingw.cmake
-          echo "set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++)" >> toolchain-ubuntu-mingw.cmake
-          echo "set(CMAKE_RC_COMPILER ${TOOLCHAIN_PREFIX}-windres)" >> toolchain-ubuntu-mingw.cmake        
-          echo "set(CMAKE_FIND_ROOT_PATH /usr/${TOOLCHAIN_PREFIX})" >> toolchain-ubuntu-mingw.cmake
+          echo "set(CMAKE_C_COMPILER i686-w64-mingw32-gcc)" >> toolchain-ubuntu-mingw.cmake
+          echo "set(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)" >> toolchain-ubuntu-mingw.cmake
+          echo "set(CMAKE_RC_COMPILER i686-w64-mingw32-windres)" >> toolchain-ubuntu-mingw.cmake        
+          echo "set(CMAKE_FIND_ROOT_PATH /usr/i686-w64-mingw32)" >> toolchain-ubuntu-mingw.cmake
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> toolchain-ubuntu-mingw.cmake
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)" >> toolchain-ubuntu-mingw.cmake
           echo "set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)" >> toolchain-ubuntu-mingw.cmake

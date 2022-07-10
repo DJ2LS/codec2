@@ -151,7 +151,7 @@ jobs:
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
           ls -R ..
-          mv src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_i686.dll
+          mv ../build_w32/src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_i686.dll
           cd ..
           mkdir build_w64
           cd build_w64
@@ -166,7 +166,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw64.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw64.cmake ..
           make
-          mv src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_x64.dll
+          mv ../build_w64/src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_x64.dll
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       #- name: LIST MINGW

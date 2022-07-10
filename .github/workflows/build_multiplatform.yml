@@ -131,7 +131,7 @@ jobs:
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       - name: Create cmake i686 toolchain
-        if: ${{!startsWith(matrix.os, 'ubuntu') }}
+        if: ${{startsWith(matrix.os, 'ubuntu') }}
         run: |     
           rm -r -f codec2
           git clone https://github.com/drowe67/codec2.git

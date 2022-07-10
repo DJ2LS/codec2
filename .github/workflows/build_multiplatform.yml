@@ -130,35 +130,35 @@ jobs:
           #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
-    - name: Create cmake i686 toolchain
-      if: ${{!startsWith(matrix.os, 'ubuntu') }}
-      run: |     
-        rm -r -f codec2
-        git clone https://github.com/drowe67/codec2.git
-        cd codec2
-        mkdir build
-        cd build
-        echo set(CMAKE_SYSTEM_NAME Windows) > toolchain-ubuntu-mingw.cmake
-        echo set(TOOLCHAIN_PREFIX i686-w64-mingw32) >> toolchain-ubuntu-mingw.cmake     
-        echo # cross compilers to use for C and C++ >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc) >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++) >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_RC_COMPILER ${TOOLCHAIN_PREFIX}-windres) >> toolchain-ubuntu-mingw.cmake        
-        echo # target environment on the build host system >> toolchain-ubuntu-mingw.cmake
-        echo #   set 1st to dir with the cross compiler's C/C++ headers/libs >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_FIND_ROOT_PATH /usr/${TOOLCHAIN_PREFIX}) >> toolchain-ubuntu-mingw.cmake
-        echo # modify default behavior of FIND_XXX() commands to >> toolchain-ubuntu-mingw.cmake
-        echo # search for headers/libs in the target environment and >> toolchain-ubuntu-mingw.cmake
-        echo # search for programs in the build host environment >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER) >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY) >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY) >> toolchain-ubuntu-mingw.cmake
-        echo # add static libgcc libraries so there are no additional dependencies >> toolchain-ubuntu-mingw.cmake
-        echo set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static") >> toolchain-ubuntu-mingw.cmake
-        cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw.cmake ..
-        make
-        ls
-  
+      - name: Create cmake i686 toolchain
+        if: ${{!startsWith(matrix.os, 'ubuntu') }}
+        run: |     
+          rm -r -f codec2
+          git clone https://github.com/drowe67/codec2.git
+          cd codec2
+          mkdir build
+          cd build
+          echo set(CMAKE_SYSTEM_NAME Windows) > toolchain-ubuntu-mingw.cmake
+          echo set(TOOLCHAIN_PREFIX i686-w64-mingw32) >> toolchain-ubuntu-mingw.cmake     
+          echo # cross compilers to use for C and C++ >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc) >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++) >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_RC_COMPILER ${TOOLCHAIN_PREFIX}-windres) >> toolchain-ubuntu-mingw.cmake        
+          echo # target environment on the build host system >> toolchain-ubuntu-mingw.cmake
+          echo #   set 1st to dir with the cross compiler's C/C++ headers/libs >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_FIND_ROOT_PATH /usr/${TOOLCHAIN_PREFIX}) >> toolchain-ubuntu-mingw.cmake
+          echo # modify default behavior of FIND_XXX() commands to >> toolchain-ubuntu-mingw.cmake
+          echo # search for headers/libs in the target environment and >> toolchain-ubuntu-mingw.cmake
+          echo # search for programs in the build host environment >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER) >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY) >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY) >> toolchain-ubuntu-mingw.cmake
+          echo # add static libgcc libraries so there are no additional dependencies >> toolchain-ubuntu-mingw.cmake
+          echo set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static") >> toolchain-ubuntu-mingw.cmake
+          cmake -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw.cmake ..
+          make
+          ls
+    
 
 
 

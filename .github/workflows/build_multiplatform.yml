@@ -69,31 +69,48 @@ jobs:
           location: D:\msys2\mingw64\
           install: >-
             mingw-w64-x86_64-toolchain
-            mingw-w64-x86_64-make
-            mingw-w64-i686-toolchain
-            mingw-w64-i686-make            
+            mingw-w64-x86_64-make          
 
-      - name: SHOW MSYS2 MINGW64
-        #working-directory: codec2
-        if: ${{startsWith(matrix.os, 'windows') }}
-        run: |
-          ls -R D:\msys2\mingw64\
+      #- name: SHOW MSYS2 MINGW64
+      #  if: ${{startsWith(matrix.os, 'windows') }}
+      #  run: |
+      #    ls -R D:\msys2\mingw64\
+      #D:\msys2\mingw64\msys64\mingw32\bin
 
-      - name: TEST BUILD MINGW64
+      - name: TEST BUILD x64
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir build
           cd build
-          cmake -G "MinGW Makefiles" CMAKE_MAKE_PROGRAM=mingw64-make.exe ../
-          make
-          rm -r *
-          cmake -G "MinGW Makefiles" CMAKE_MAKE_PROGRAM=mingw32-make.exe ../
-          make          
+          cmake -G "MinGW Makefiles" ../
+          make      
 
 
-    
+      - name: cleanup msys2
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+          rm -r D:\msys2
+
+      - uses: msys2/setup-msys2@v2
+        if: ${{startsWith(matrix.os, 'windows') }}
+        with:
+          msystem: MINGW64
+          location: D:\msys2\mingw64\
+          install: >-
+            mingw-w64-i686-toolchain
+            mingw-w64-i686-make 
+
+      - name: TEST BUILD i686
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+          # git clone https://github.com/drowe67/codec2.git
+          # cd codec2
+          # mkdir build
+          # cd build
+          cmake -G "MinGW Makefiles" ../
+          make  
           
 
       - name: Build codec2 ${{ matrix.os }}

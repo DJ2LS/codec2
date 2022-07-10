@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         # platform: [x86, x64]
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12, windows-2019, windows-2022]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         include:
           - os: ubuntu-18.04
             libcodec2_name: libcodec2.so
@@ -122,10 +122,10 @@ jobs:
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir build
+          mkdir tempfiles
           cd build
           cmake ../
           make
-          mkdir ../tempfiles
           #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 

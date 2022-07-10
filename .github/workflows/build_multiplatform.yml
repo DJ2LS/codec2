@@ -74,6 +74,19 @@ jobs:
         run: |
           ls -R D:\msys2\mingw64\
 
+      - name: TEST BUILD MINGW64
+        if: ${{startsWith(matrix.os, 'windows') }}
+        run: |
+          git clone https://github.com/drowe67/codec2.git
+          cd codec2
+          mkdir build
+          cd build
+          cmake -G "MinGW Makefiles" ../
+          make
+          
+
+
+
       - uses: msys2/setup-msys2@v2
         if: ${{startsWith(matrix.os, 'windows') }}
         with:

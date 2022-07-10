@@ -113,7 +113,6 @@ jobs:
           cd build
           cmake -G "MinGW Makefiles" ../
           make
-          mkdir tempfiles
           mv src/${{ matrix.libcodec2_name }} tempfiles/${{ matrix.libcodec2_os_name }}_i686_${{ matrix.libcodec2_filetype }}
 
       - name: Build codec2 ${{ matrix.os }}

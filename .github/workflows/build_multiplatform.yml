@@ -133,8 +133,7 @@ jobs:
       - name: Create cmake i686 toolchain
         if: ${{startsWith(matrix.os, 'ubuntu') }}
         run: |
-          apt-get install mingw-w64 g++-mingw-w64
-          #rm -r -f codec2
+          # rm -r -f codec2
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir build

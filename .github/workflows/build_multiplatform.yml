@@ -138,6 +138,7 @@ jobs:
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir build_w32
+          mkdir tempfiles
           cd build_w32
           echo 'set(CMAKE_SYSTEM_NAME Windows)' > toolchain-ubuntu-mingw32.cmake
           echo 'set(CMAKE_C_COMPILER i686-w64-mingw32-gcc)' >> toolchain-ubuntu-mingw32.cmake
@@ -150,8 +151,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw32.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
-          ls -R ..
-          mv ../build_w32/src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_i686.dll
+          mv src/libcodec2.dll ../tempfiles/${{ matrix.libcodec2_os_name }}_i686.dll
           cd ..
           mkdir build_w64
           cd build_w64
@@ -166,7 +166,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw64.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw64.cmake ..
           make
-          mv ../build_w64/src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_x64.dll
+          mv src/libcodec2.dll ../tempfiles/${{ matrix.libcodec2_os_name }}_x64.dll
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       #- name: LIST MINGW
@@ -200,7 +200,8 @@ jobs:
         with:
           name: ${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           #path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
-          path: codec2/build/tempfiles/*
+          path: codec2/tempfiles/*
+
 
       - name: LIST ALL FILES
         shell: bash

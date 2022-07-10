@@ -134,6 +134,7 @@ jobs:
         run: |
           # rm -r -f codec2
           sudo apt install build-essential mingw-w64 g++-mingw-w64 make cmake
+          ls -L /usr/i686-w64-mingw32
           git clone https://github.com/drowe67/codec2.git
           cd codec2
           mkdir tempfiles

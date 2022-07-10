@@ -72,9 +72,10 @@ jobs:
         #working-directory: codec2
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
-          ls -R D:\msys2\mingw64\msys64\mingw64\
+          ls -R D:\msys2\mingw64\
 
       - uses: msys2/setup-msys2@v2
+        if: ${{startsWith(matrix.os, 'windows') }}
         with:
           msystem: MINGW32
           location: D:\msys2\mingw32\
@@ -83,7 +84,7 @@ jobs:
         #working-directory: codec2
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
-          ls -R D:\msys2\mingw32\msys64\mingw32\bin
+          ls -R D:\msys2\mingw32\
           
           
 

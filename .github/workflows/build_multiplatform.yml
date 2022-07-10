@@ -94,17 +94,17 @@ jobs:
           msystem: MINGW32
           location: D:\msys2\mingw64\
           install: >-
-            mingw-w32-i686-toolchain
-            mingw-w32-i686-make 
+            mingw-w32-x86_64-toolchain
+            mingw-w32-x86_64-make 
 
       # D:/a/codec2/codec2/codec2/build
       - name: TEST BUILD i686
         if: ${{startsWith(matrix.os, 'windows') }}
         run: |
           #git clone https://github.com/drowe67/codec2.git
-          #cd codec2
+          cd codec2
           #mkdir build
-          #cd build
+          cd build
           cmake -G "MinGW Makefiles" ../
           make  
 

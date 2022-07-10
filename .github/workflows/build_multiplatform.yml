@@ -150,7 +150,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw32.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
-          ls -R
+          ls -R ..
           mv src/libcodec2.dll tempfiles/${{ matrix.libcodec2_os_name }}_i686.dll
           cd ..
           mkdir build_w64

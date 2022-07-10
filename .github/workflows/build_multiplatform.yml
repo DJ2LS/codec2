@@ -67,6 +67,14 @@ jobs:
         with:
           msystem: MINGW64
           location: D:\msys2\mingw64\
+          install: >-
+            git
+            make
+          pacboy: >-
+            toolchain:p
+            cmake:p
+            ninja:p
+            
 
       - name: SHOW MSYS2 MINGW64
         #working-directory: codec2

@@ -11,8 +11,8 @@ jobs:
         # platform: [x86, x64]
         # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         os: [ubuntu-18.04]
-        platform: [{name: "Windows", file: "dll"}, {name: "Darwin", file: "dylib"}]
-        architecture: [i686-w64-mingw32, x86_64-w64-mingw32]
+        platform: [{name: "native"}, {name: "Windows", file: "dll"}]
+        architecture: [native, i686-w64-mingw32, x86_64-w64-mingw32]
         include:
           - os: ubuntu-18.04
             libcodec2_name: libcodec2.so
@@ -133,7 +133,7 @@ jobs:
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}
-        if: ${{startsWith(matrix.os, 'ubuntu') }}
+        if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
         run: |
           sudo apt install build-essential mingw-w64 g++-mingw-w64 make cmake
           #ls -R /usr/i686-w64-mingw32
@@ -161,21 +161,6 @@ jobs:
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
           mv src/libcodec2.${{ matrix.platform.file }} ../tempfiles/libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          #cd ..
-          #mkdir build_w64
-          #cd build_w64
-          #echo 'set(CMAKE_SYSTEM_NAME Windows)' > toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_C_COMPILER x86_64-w64-mingw32-gcc)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_CXX_COMPILER x86_64-w64-mingw32-g++)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_RC_COMPILER x86_64-w64-mingw32-windres)' >> toolchain-ubuntu-mingw64.cmake        
-          #echo 'set(CMAKE_FIND_ROOT_PATH /usr/x86_64-w64-mingw32)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)' >> toolchain-ubuntu-mingw64.cmake
-          #echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw64.cmake
-          #cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw64.cmake ..
-          #make
-          #mv src/libcodec2.dll ../tempfiles/libcodec2_${{ matrix.platform }}_${{ matrix.architecture }}.dll
 
       # C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin
       #- name: LIST MINGW

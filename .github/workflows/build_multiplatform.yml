@@ -60,6 +60,7 @@ jobs:
           cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}.${{ matrix.libcodec2_filetype }}
+          cd ..
 
       - uses: actions/upload-artifact@v3
         if: ${{startsWith(matrix.platform.name, 'native') }}

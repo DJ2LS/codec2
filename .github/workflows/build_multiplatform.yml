@@ -69,6 +69,15 @@ jobs:
           # path: ${{ github.workspace }}/codec2/tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
           path: src/${{ matrix.libcodec2_name }}
 
+
+      - uses: actions/upload-artifact@v3
+        if: ${{startsWith(matrix.platform.name, 'native') }}
+        with:
+          name: TEST
+          # path: ${{ github.workspace }}/codec2/tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
+          path: ${{ github.workspace }}/*
+
+
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}
         if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
         run: |

@@ -13,21 +13,21 @@ jobs:
         architecture: [i686-w64-mingw32, x86_64-w64-mingw32]
         include:
           - os: ubuntu-18.04
-            libcodec2_name: libcodec2.so
+            libcodec2_name: libcodec2.so.1.0
             libcodec2_os_name: libcodec2_ubuntu-1804
             libcodec2_filetype: so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-20.04
-            libcodec2_name: libcodec2.so
+            libcodec2_name: libcodec2.so.1.0
             libcodec2_os_name: libcodec2_ubuntu-2004
             libcodec2_filetype: so
             generator: Unix Makefiles
             shell: bash
 
           - os: ubuntu-22.04
-            libcodec2_name: libcodec2.so
+            libcodec2_name: libcodec2.so.1.0
             libcodec2_os_name: libcodec2_ubuntu-2204
             libcodec2_filetype: so
             generator: Unix Makefiles
@@ -67,7 +67,7 @@ jobs:
         with:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
           # path: ${{ github.workspace }}/codec2/tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
-          path: ${{ github.workspace }}/codec2/src/${{ matrix.libcodec2_name }}
+          path: ${{ github.workspace }}/codec2/tempfiles/
 
 
       - uses: actions/upload-artifact@v3

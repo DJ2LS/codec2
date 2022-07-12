@@ -10,11 +10,12 @@ jobs:
       matrix:
         # platform: [x86, x64]
         # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
-        platform: [Windows]
+        os: [ubuntu-18.04]
+        platform: [Windows, Linux]
         architecture: [i686-w64-mingw32, x86_64-w64-mingw32]
         include:
           - os: ubuntu-18.04
+            name : [.dll, .so]
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-1804
             libcodec2_filetype: .so
@@ -160,7 +161,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw32.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
-          mv src/libcodec2.dll ../tempfiles/libcodec2_${{ matrix.platform }}_${{ matrix.architecture }}.dll
+          mv src/libcodec2.${{ matrix.name }} ../tempfiles/libcodec2_${{ matrix.platform }}_${{ matrix.architecture }}.dll
           #cd ..
           #mkdir build_w64
           #cd build_w64

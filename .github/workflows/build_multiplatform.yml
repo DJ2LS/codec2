@@ -145,7 +145,7 @@ jobs:
           #cd build
           #cmake ../
           #make
-          mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          #mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           #cd ..   
           mkdir build_w32
           cd build_w32

@@ -11,11 +11,10 @@ jobs:
         # platform: [x86, x64]
         # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         os: [ubuntu-18.04]
-        platform: [{name: "Windows", file: "dll"}, {name: "Linux", file: "so"}]
+        platform: [{name: "Windows", file: "dll"}, {name: "Linux", file: "so"}, {name: "Darwin", file: "dylib"}]
         architecture: [i686-w64-mingw32, x86_64-w64-mingw32]
         include:
           - os: ubuntu-18.04
-            name : [.dll, .so]
             libcodec2_name: libcodec2.so
             libcodec2_os_name: libcodec2_ubuntu-1804
             libcodec2_filetype: .so
@@ -133,7 +132,7 @@ jobs:
           #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
-      - name: Build ${{ matrix.platform }} ${{ matrix.architecture }}
+      - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}
         if: ${{startsWith(matrix.os, 'ubuntu') }}
         run: |
           sudo apt install build-essential mingw-w64 g++-mingw-w64 make cmake
@@ -161,7 +160,7 @@ jobs:
           echo 'set(CMAKE_SHARED_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")' >> toolchain-ubuntu-mingw32.cmake
           cmake -G "Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=toolchain-ubuntu-mingw32.cmake ..
           make
-          mv src/libcodec2.${{ matrix.platform.file }} ../tempfiles/libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.dll
+          mv src/libcodec2.${{ matrix.platform.file }} ../tempfiles/libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
           #cd ..
           #mkdir build_w64
           #cd build_w64
@@ -208,7 +207,7 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: libcodec2_${{ matrix.platform }}_${{ matrix.architecture }}_${{ matrix.libcodec2_filetype }}
+          name: libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
           #path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           path: codec2/tempfiles/*
 

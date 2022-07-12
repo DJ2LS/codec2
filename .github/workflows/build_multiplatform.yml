@@ -92,9 +92,10 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
+        working-directory: codec2
         with:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          path: codec2/tempfiles/*
+          path: tempfiles/*
 
 
       - name: LIST ALL FILES

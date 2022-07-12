@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   BUILD_ON_AMD64:
-    name: Build codec2 ${{ matrix.os }} x64
+    name: Build codec2 ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -60,8 +60,13 @@ jobs:
           cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}.${{ matrix.libcodec2_filetype }}
-          cd ..
-          ls -R -d
+
+      - uses: actions/upload-artifact@v3
+        if: ${{startsWith(matrix.platform.name, 'native') }}
+        with:
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          path: codec2/tempfiles/*
+
 
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}
         if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
@@ -86,24 +91,11 @@ jobs:
           mv src/libcodec2.${{ matrix.platform.file }} ../tempfiles/libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
 
       - uses: actions/upload-artifact@v3
-        with:
-          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          path: tempfiles/*
-
-      - uses: actions/upload-artifact@v3
+        if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
         with:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
           path: codec2/tempfiles/*
 
-      - uses: actions/upload-artifact@v3
-        with:
-          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          path: codec2/codec2/tempfiles/*
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          path: codec2/codec2/codec2/tempfiles/*
 
       - name: LIST ALL FILES
         shell: bash

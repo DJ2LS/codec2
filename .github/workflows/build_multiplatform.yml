@@ -10,6 +10,7 @@ jobs:
       matrix:
         # platform: [x86, x64]
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
+        platform: [i686-w64-mingw32, x86_64-w64-mingw32-gcc]
         include:
           - os: ubuntu-18.04
             libcodec2_name: libcodec2.so
@@ -129,7 +130,7 @@ jobs:
           #mv src/${{ matrix.libcodec2_name }} src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
 
-      - name: Create Windows mingw i686-x64 build
+      - name: Create Windows mingw ${{ matrix.platform }} build
         if: ${{startsWith(matrix.os, 'ubuntu') }}
         run: |
           # rm -r -f codec2

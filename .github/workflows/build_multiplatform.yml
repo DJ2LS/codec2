@@ -11,7 +11,7 @@ jobs:
         # platform: [x86, x64]
         # os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         os: [ubuntu-18.04]
-        platform: [{name: "Windows", file: "dll"}, {name: "Linux", file: "so"}, {name: "Darwin", file: "dylib"}]
+        platform: [{name: "Windows", file: "dll"}, {name: "Darwin", file: "dylib"}]
         architecture: [i686-w64-mingw32, x86_64-w64-mingw32]
         include:
           - os: ubuntu-18.04

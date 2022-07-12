@@ -84,6 +84,10 @@ jobs:
           make
           mv src/libcodec2.${{ matrix.platform.file }} ../tempfiles/libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          path: tempfiles/*
 
       - uses: actions/upload-artifact@v3
         with:

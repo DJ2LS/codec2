@@ -98,10 +98,15 @@ jobs:
 
       - uses: actions/upload-artifact@v3
         with:
-          name: libcodec2_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
           #path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
           path: codec2/tempfiles/*
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          #path: codec2/build/src/${{ matrix.libcodec2_os_name }}_${{ matrix.libcodec2_filetype }}
+          path: ../codec2/tempfiles/*
 
       - name: LIST ALL FILES
         shell: bash

@@ -99,6 +99,11 @@ jobs:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
           path: codec2/codec2/tempfiles/*
 
+      - uses: actions/upload-artifact@v3
+        with:
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          path: codec2/codec2/codec2/tempfiles/*
+
       - name: LIST ALL FILES
         shell: bash
         run: |

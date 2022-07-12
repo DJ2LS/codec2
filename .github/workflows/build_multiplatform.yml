@@ -60,7 +60,8 @@ jobs:
           cmake ../
           make
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}.${{ matrix.libcodec2_filetype }}
-          ls -R -d ..
+          cd ..
+          ls -R -d
 
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}
         if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}

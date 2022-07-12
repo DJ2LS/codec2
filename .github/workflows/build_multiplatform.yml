@@ -34,14 +34,14 @@ jobs:
             shell: bash
 
           - os: macos-11
-            libcodec2_name: libcodec2.dylib.1.0
+            libcodec2_name: libcodec2.dylib
             libcodec2_os_name: libcodec2_macos-11
             libcodec2_filetype: dylib
             generator: Unix Makefiles
             shell: bash
 
           - os: macos-12
-            libcodec2_name: libcodec2.dylib.1.0
+            libcodec2_name: libcodec2.dylib
             libcodec2_os_name: libcodec2_macos-12
             libcodec2_filetype: dylib
             generator: Unix Makefiles

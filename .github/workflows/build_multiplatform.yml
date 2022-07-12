@@ -62,13 +62,11 @@ jobs:
           mv src/${{ matrix.libcodec2_name }} ../tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
 
 
-          
-
       - uses: actions/upload-artifact@v3
         if: ${{startsWith(matrix.platform.name, 'native') }}
         with:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
-          path: codec2/build/src/${{ matrix.libcodec2_name }}
+          path: ${{ github.workspace }}/codec2/tempfiles/*
 
 
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}

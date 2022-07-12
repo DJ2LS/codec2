@@ -59,7 +59,7 @@ jobs:
           cd build
           cmake ../
           make
-          mv src/${{ matrix.libcodec2_name }} ../tempfiles/${{ matrix.libcodec2_os_name }}.${{ matrix.libcodec2_filetype }}
+          mv src/${{ matrix.libcodec2_name }} ../tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.libcodec2_filetype }}
           cd ..
 
       - name: LIST ALL FILES
@@ -71,7 +71,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         if: ${{startsWith(matrix.platform.name, 'native') }}
         with:
-          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
+          name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.libcodec2_filetype }}
           path: codec2/tempfiles/*
 
 
@@ -101,7 +101,7 @@ jobs:
         if: ${{startsWith(matrix.os, 'ubuntu') && !startsWith(matrix.platform.name, 'native') }}
         with:
           name: libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}_${{ matrix.architecture }}.${{ matrix.platform.file }}
-          path: tempfiles/*
+          path: codec2/tempfiles/*
 
 
 

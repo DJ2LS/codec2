@@ -75,7 +75,7 @@ jobs:
         with:
           name: TEST
           # path: ${{ github.workspace }}/codec2/tempfiles/libcodec2_${{ matrix.os }}_${{ matrix.platform.name }}.${{ matrix.libcodec2_filetype }}
-          path: ${{ github.workspace }}/codec2/
+          path: ${{ github.workspace }}/codec2/build/
 
 
       - name: Build ${{ matrix.platform.name }} ${{ matrix.architecture }}

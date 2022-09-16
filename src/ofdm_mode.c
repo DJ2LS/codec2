@@ -80,7 +80,7 @@ void ofdm_init_mode(char mode[], struct OFDM_CONFIG *config) {
         config->tx_bpf_en = false;
         config->data_mode = "streaming";
     } else if (strcmp(mode,"datac0") == 0) {
-        config->ns=5; config->np=12; config->tcp = 0.006; config->ts = 0.016; config->nc = 3;
+        config->ns=5; config->np=9; config->tcp = 0.006; config->ts = 0.016; config->nc = 4;
         config->edge_pilots = 0;
         config->txtbits = 0; config->nuwbits = 32; config->bad_uw_errors = 9;
         config->state_machine = "data"; config->amp_est_mode = 1;

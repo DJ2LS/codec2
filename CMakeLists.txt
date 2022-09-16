@@ -5,19 +5,13 @@
 # Please report questions, comments, problems, or patches to the freetel
 # mailing list: https://lists.sourceforge.net/lists/listinfo/freetel-codec2
 #
-set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version")
-
-project(codec2)
-
-cmake_minimum_required(VERSION 3.0)
-
-# Set policies here, probably should move to cmake dir.
-if(POLICY CMP0075)
-    cmake_policy(SET CMP0075 NEW)
-endif()
-if(POLICY CMP0079)
-    cmake_policy(SET CMP0079 NEW)
-endif()
+cmake_minimum_required(VERSION 3.13)
+project(CODEC2
+  VERSION 1.0.7
+  DESCRIPTION "Next-Generation Digital Voice for Two-Way Radio"
+  HOMEPAGE_URL "https://www.rowetel.com/codec2.html"
+  LANGUAGES C
+  )
 
 include(GNUInstallDirs)
 mark_as_advanced(CLEAR
@@ -39,23 +33,6 @@ if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
    "separate build directory and run cmake from there.")
 endif("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
 
-#
-# Set project version information. This should probably be done via external
-# file at some point.
-#
-set(CODEC2_VERSION_MAJOR 1)
-set(CODEC2_VERSION_MINOR 0)
-# Set to patch level if needed, otherwise leave FALSE.
-# Must be positive (non-zero) if set, since 0 == FALSE in CMake.
-set(CODEC2_VERSION_PATCH 3)
-set(CODEC2_VERSION "${CODEC2_VERSION_MAJOR}.${CODEC2_VERSION_MINOR}")
-# Patch level version bumps should not change API/ABI.
-set(SOVERSION "${CODEC2_VERSION_MAJOR}.${CODEC2_VERSION_MINOR}")
-if(CODEC2_VERSION_PATCH)
-    set(CODEC2_VERSION "${CODEC2_VERSION}.${CODEC2_VERSION_PATCH}")
-endif()
-message(STATUS "codec2 version: ${CODEC2_VERSION}")
-
 # Set default build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -65,22 +42,23 @@ endif()
 if(BUILD_OSX_UNIVERSAL)
 set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 endif(BUILD_OSX_UNIVERSAL)
+set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment version")
 
 #
 # Find the git hash if this is a working copy.
 #
 if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
-    find_package(Git QUIET)
+    find_package(Git)
     if(Git_FOUND)
         execute_process(
-            COMMAND "${GIT_EXECUTABLE}" describe --always HEAD
+            COMMAND "${GIT_EXECUTABLE}" rev-parse --short HEAD
             WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
             RESULT_VARIABLE res
-            OUTPUT_VARIABLE FREEDV_HASH
+            OUTPUT_VARIABLE CODEC2_HASH
             ERROR_QUIET
             OUTPUT_STRIP_TRAILING_WHITESPACE)
-        message(STATUS "freedv-gui current git hash: ${FREEDV_HASH}")
-        add_definitions(-DGIT_HASH="${FREEDV_HASH}")
+        message(STATUS "Codec2 current git hash: ${CODEC2_HASH}")
+        add_definitions(-DGIT_HASH="${CODEC2_HASH}")
     else()
         message(WARNING "Git not found. Can not determine current commit hash.")
         add_definitions(-DGIT_HASH="Unknown")
@@ -126,27 +104,6 @@ if(MINGW)
     message(STATUS "System is MinGW.")
 endif(MINGW)
 
-
-#
-# Find the git hash if this is a working copy.
-#
-if(EXISTS ${CMAKE_SOURCE_DIR}/.git)
-    find_package(Git)
-    if(Git_FOUND)
-        execute_process(
-            COMMAND "${GIT_EXECUTABLE}" describe --always HEAD
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-            RESULT_VARIABLE res
-            OUTPUT_VARIABLE CODEC2_HASH
-            ERROR_QUIET
-            OUTPUT_STRIP_TRAILING_WHITESPACE)
-        message(STATUS "Codec2 current git hash: ${CODEC2_HASH}")
-    else()
-        message(WARNING "Git not found. Can not determine current commit hash.")
-    endif()
-endif()
-
-
 #
 # Default options
 #
@@ -188,10 +145,6 @@ endif()
 
 if (_GNU_SOURCE)
     add_definitions(-D_GNU_SOURCE=1)
-endif()
-
-if(UNIX)
-    set(CMAKE_REQUIRED_LIBRARIES m)
 endif()
 
 check_symbol_exists(floor  math.h   HAVE_FLOOR)
@@ -288,14 +241,10 @@ else()
 endif()
 
 # Return the date (yyyy-mm-dd)
-macro(DATE RESULT)
-  execute_process(COMMAND "date" "+%Y%m%d" OUTPUT_VARIABLE ${RESULT})
-endmacro()
-DATE(DATE_RESULT)
-string(REGEX REPLACE "\n$" "" DATE_RESULT "${DATE_RESULT}")
+string(TIMESTAMP DATE_RESULT "%Y-%m-%d" UTC)
 message(STATUS "Compilation date = XX${DATE_RESULT}XX")
 
-set(CPACK_PACKAGE_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}-${DATE_RESULT}-${FREEDV_HASH}")
+set(CPACK_PACKAGE_VERSION_PATCH "${CPACK_PACKAGE_VERSION_PATCH}-${DATE_RESULT}-${CODEC2_HASH}")
 
 if(WIN32)
     #
@@ -325,7 +274,7 @@ elseif(UNIX AND NOT APPLE)
     SET(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
     SET(CPACK_DEBIAN_ENABLE_COMPONENT_DEPENDS ON)
     SET(CPACK_DEBIAN_LIB_PACKAGE_NAME "codec2")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "lpcnet (>= 0.2.0)")
+    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "lpcnet (>= 0.3.0)")
     include(CPack)
     cpack_add_component(lib REQUIRED)
     cpack_add_component(dev DEPENDS lib)
@@ -399,6 +348,10 @@ endif()
              COMMAND sh -c "cd ${CMAKE_CURRENT_SOURCE_DIR}/octave; SHORT_VERSION_FOR_CTEST=1 octave-cli -qf ldpcut.m")
              set_tests_properties(test_CML_ldpcut PROPERTIES PASS_REGULAR_EXPRESSION "Nerr: 0")
 
+    # Golay (23,11) unit tests
+    add_test(NAME test_golay23 COMMAND sh -c "${CMAKE_CURRENT_BINARY_DIR}/unittest/golay23")
+    add_test(NAME test_golay23_runtime_tables COMMAND sh -c "${CMAKE_CURRENT_BINARY_DIR}/unittest/golay23_runtime_tables")
+
     # check channel simulator measures correct Peak to Average Power Ratio (about 0dB) with a sine wave input signal
     add_test(NAME test_ch_papr
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR};
@@ -413,10 +366,35 @@ endif()
                DISPLAY=\"\" octave-cli -qf --eval 'tnewamp1(\"${CMAKE_CURRENT_BINARY_DIR}/src/cq_ref\", \"${CMAKE_CURRENT_BINARY_DIR}/unittest\")'")
              set_tests_properties(test_codec2_700c_octave_port PROPERTIES PASS_REGULAR_EXPRESSION "fails: 0")
 
+    # -------------------------------------------------------------------------
+    #                                FDMDV Modem
+    # -------------------------------------------------------------------------
+
+    add_test(NAME test_FDMDV_modem_octave_ut
+             COMMAND sh -c "
+               cd ${CMAKE_CURRENT_SOURCE_DIR}/octave/;
+               DISPLAY=\"\" octave-cli -qf fdmdv_ut.m")
+             set_tests_properties(test_FDMDV_modem_octave_ut PROPERTIES PASS_REGULAR_EXPRESSION "errors......: 0")
+
+    add_test(NAME test_FDMDV_modem_octave_mod_demod
+             COMMAND sh -c "
+               cd ${CMAKE_CURRENT_SOURCE_DIR}/octave/;
+               echo \"fdmdv_mod('test.raw',1400); fdmdv_demod('test.raw',1400); quit\" | DISPLAY=\"\" octave-cli")
+             set_tests_properties(test_FDMDV_modem_octave_mod_demod PROPERTIES PASS_REGULAR_EXPRESSION "0 errors")
+
     add_test(NAME test_FDMDV_modem_octave_port
              COMMAND sh -c "$<TARGET_FILE:tfdmdv> && DISPLAY=\"\" octave-cli --no-gui -qf ${CMAKE_CURRENT_SOURCE_DIR}/octave/tfdmdv.m"
              WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/octave)
-             set_tests_properties(PROPERTIES PASS_REGULAR_EXPRESSION "fails: 0")
+             set_tests_properties(test_FDMDV_modem_octave_port PROPERTIES PASS_REGULAR_EXPRESSION "fails: 0")
+
+    add_test(NAME test_FDMDV_modem_octave_c
+             COMMAND sh -c "
+               cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+               ./fdmdv_get_test_bits - 14000 | ./fdmdv_mod - - | 
+               ./fdmdv_demod - - 14 demod_dump.txt | ./fdmdv_put_test_bits - ;
+               cd ${CMAKE_CURRENT_SOURCE_DIR}/octave/;
+               DISPLAY=\"\" octave-cli -qf fdmdv_ut.m")
+             set_tests_properties(test_FDMDV_modem_octave_c PROPERTIES PASS_REGULAR_EXPRESSION "errors......: 0")
 
     add_test(NAME test_COHPSK_modem_octave_port
              COMMAND sh -c "$<TARGET_FILE:tcohpsk> && DISPLAY=\"\" octave-cli --no-gui -qf ${CMAKE_CURRENT_SOURCE_DIR}/octave/tcohpsk.m"
@@ -424,11 +402,21 @@ endif()
              set_tests_properties(test_COHPSK_modem_octave_port PROPERTIES PASS_REGULAR_EXPRESSION "fails: 0")
 
     add_test(NAME test_COHPSK_modem_AWGN_BER
-             COMMAND sh -c "$<TARGET_FILE:cohpsk_get_test_bits> - 5600 | $<TARGET_FILE:cohpsk_mod> - - | $<TARGET_FILE:ch> - - --No -30 --Fs 7500 | $<TARGET_FILE:cohpsk_demod> - - | $<TARGET_FILE:cohpsk_put_test_bits> -"
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+                            ./cohpsk_get_test_bits - 5600 |
+                            ./cohpsk_mod - - |
+                            ./ch - - --No -30 --Fs 7500 | 
+                            ./cohpsk_demod - - |
+                            ./cohpsk_put_test_bits -"
              )
 
     add_test(NAME test_COHPSK_modem_freq_offset
-             COMMAND sh -c "set -x; $<TARGET_FILE:cohpsk_get_test_bits> - 5600 | $<TARGET_FILE:cohpsk_mod> - - | $<TARGET_FILE:ch> - - --No -40 -f -30 --Fs 7500 | $<TARGET_FILE:cohpsk_demod> -v - - 2>log.txt | $<TARGET_FILE:cohpsk_put_test_bits> - ; ! grep 'lost sync' log.txt"
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+                            ./cohpsk_get_test_bits - 5600 |
+                            ./cohpsk_mod - - |
+                            ./ch - - --No -40 -f -30 --Fs 7500 | 
+                            ./cohpsk_demod - - |
+                            ./cohpsk_put_test_bits -"
              )
 
     # -------------------------------------------------------------------------
@@ -572,6 +560,13 @@ endif()
                             ./ch - - --No -19 |
                             ./ofdm_demod --mode 2020B --testframes --ldpc -v 2 > /dev/null")
            
+    # 2020C AWGN test 
+    add_test(NAME test_OFDM_modem_2020C_AWGN
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+                            ./ofdm_mod --in /dev/zero --testframes 10 --mode 2020C --ldpc --clip --txbpf |
+                            ./ch - - --No -21 |
+                            ./ofdm_demod --mode 2020C --testframes --ldpc -v 2 > /dev/null")
+           
     # -------------------------------------------------------------------------
     #                                OFDM Data modes
     # -------------------------------------------------------------------------
@@ -640,6 +635,13 @@ endif()
                             ./ldpc_enc /dev/zero - --sd --code HRA_56_56 --testframes 200 |
                             ./ldpc_noise - - 0.5 |
                             ./ldpc_dec - /dev/null --code HRA_56_56 --sd --testframes"
+             )
+
+    add_test(NAME test_ldpc_enc_dec_H_212_158
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+                            ./ldpc_enc /dev/zero - --sd --code H_212_158 --testframes 200 |
+                            ./ldpc_noise - - -2.0 |
+                            ./ldpc_dec - /dev/null --code H_212_158 --sd --testframes"
              )
 
     add_test(NAME test_ldpc_enc_dec_HRAb_396_504
@@ -745,10 +747,34 @@ endif()
              COMMAND sh -c "dd bs=2560 count=120 if=/dev/zero | $<TARGET_FILE:freedv_tx> 700D - - --testframes | $<TARGET_FILE:ch> - - --No -20 -f -10 | $<TARGET_FILE:freedv_rx> 700D - /dev/null --testframes --discard"
              )
 
+    # exercises complex rx codepath, albeit with just real samples
     add_test(NAME test_freedv_api_700D_AWGN_BER_USECOMPLEX
              COMMAND sh -c "dd bs=2560 count=120 if=/dev/zero | $<TARGET_FILE:freedv_tx> 700D - - --testframes | $<TARGET_FILE:ch> - - --No -20 -f -10 | $<TARGET_FILE:freedv_rx> 700D - /dev/null --testframes --discard --usecomplex"
              )
 
+    # check real part of freedv_comptx() matches freedv_tx()
+    add_test(NAME test_freedv_api_700D_real_comp
+             COMMAND sh -c "cd ${CMAKE_CURRENT_SOURCE_DIR}/unittest;
+                            PATH=$PATH:${CMAKE_CURRENT_BINARY_DIR}/demo:${CMAKE_CURRENT_BINARY_DIR}/unittest;
+                            ./check_real_comp.sh"
+            )
+
+    # exercises freedv_comptx()
+    add_test(NAME test_freedv_api_700D_comptx
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/unittest;
+                            cat ${CMAKE_CURRENT_SOURCE_DIR}/raw/ve9qrp_10s.raw |
+                            ./freedv_700d_comptx |
+                            ./freedv_700d_comprx tx > /dev/null"
+             )
+           
+    # exercises freedv_comprx()
+    add_test(NAME test_freedv_api_700D_comprx
+             COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/unittest;
+                            cat ${CMAKE_CURRENT_SOURCE_DIR}/raw/ve9qrp_10s.raw |
+                            ./freedv_700d_comptx |
+                            ./freedv_700d_comprx rx > /dev/null"
+             )
+           
 if(LPCNET)
 
     add_test(NAME test_freedv_api_2020_to_ofdm_demod
@@ -757,7 +783,7 @@ if(LPCNET)
                                ./ofdm_demod --mode 2020 --verbose 1 --ldpc --testframes > /dev/null"
              )
 
-    add_test(NAME test_freedv_api_2020_from_ofdm_mod
+     add_test(NAME test_freedv_api_2020_from_ofdm_mod
              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
                             ./ofdm_mod --in /dev/zero --mode 2020 --verbose 1 --ldpc --testframes 10 |
                             ./freedv_rx 2020 - /dev/null --testframes"
@@ -777,6 +803,14 @@ if(LPCNET)
                             ./freedv_tx 2020B - - --testframes --clip 1 |
                             ./ch - - --No -25 --mpp --fading_dir ../unittest |
                             ./freedv_rx 2020B - /dev/null --testframes"
+             )
+
+     add_test(NAME test_freedv_api_2020C_mpd
+              COMMAND sh -c "cd ${CMAKE_CURRENT_BINARY_DIR}/src;
+                            dd bs=32000 count=60 if=/dev/zero |
+                            ./freedv_tx 2020C - - --testframes --clip 1 |
+                            ./ch - - --No -32 --mpd --fading_dir ../unittest |
+                            ./freedv_rx 2020C - /dev/null --testframes"
              )
 endif()
 
@@ -808,6 +842,17 @@ endif()
              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/unittest
              )
 
+     add_test(NAME test_peak_levels
+             COMMAND sh -c "cd ${CMAKE_CURRENT_SOURCE_DIR}/unittest;
+                            PATH=$PATH:${CMAKE_CURRENT_BINARY_DIR}/src ./check_peak.sh")
+             set_tests_properties(test_peak_levels PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL")
+if(LPCNET)
+     add_test(NAME test_peak_levels_lpcnet
+             COMMAND sh -c "cd ${CMAKE_CURRENT_SOURCE_DIR}/unittest;
+                            PATH=$PATH:${CMAKE_CURRENT_BINARY_DIR}/src ./check_peak.sh LPCNet")
+             set_tests_properties(test_peak_levels_lpcnet PROPERTIES FAIL_REGULAR_EXPRESSION "FAIL")
+endif()
+           
     # -------------------------------------------------------------------------
     #                                Reliable Text
     # -------------------------------------------------------------------------

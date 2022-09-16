@@ -236,7 +236,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    /* init the modem with our (optinally) custom config */
+    /* init the modem with our (optionally) custom config */
     struct OFDM *ofdm = ofdm_create(ofdm_config);
     assert(ofdm != NULL);
 
@@ -264,6 +264,7 @@ int main(int argc, char *argv[]) {
             set_data_bits_per_frame(&ldpc, 156);
             ldpc.protection_mode = LDPC_PROT_2020B;
         }
+        if (!strcmp(mode,"2020C")) set_data_bits_per_frame(&ldpc, 156);
         Ndatabitsperpacket = ldpc.data_bits_per_frame;
 
         if (verbose > 1) {

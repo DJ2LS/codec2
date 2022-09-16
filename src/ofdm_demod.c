@@ -350,6 +350,7 @@ int main(int argc, char *argv[]) {
             set_data_bits_per_frame(&ldpc, 156);
             ldpc.protection_mode = LDPC_PROT_2020B;
         }
+        if (!strcmp(mode,"2020C")) set_data_bits_per_frame(&ldpc, 156);
         Ndatabitsperpacket = ldpc.data_bits_per_frame;
 
         if (verbose > 1) {
@@ -389,7 +390,7 @@ int main(int argc, char *argv[]) {
     float sum_SNR3kdB = 0.0;
     
     if (strlen(ofdm->data_mode) == 0)
-        Ndiscard = NDISCARD; /* backwards compatability with 700D/2020        */
+        Ndiscard = NDISCARD; /* backwards compatibility with 700D/2020        */
     else
         Ndiscard = 1;        /* much longer packets, so discard thresh smaller */
 

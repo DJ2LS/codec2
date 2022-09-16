@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     float                      snr_est;
     float                      clock_offset;
     int                        use_testframes, verbose, discard, use_complex, use_dpsk, use_reliabletext;
-    int                        use_squelch, vq_type;
+    int                        use_squelch;
     float                      squelch = 0;
     struct freedv             *freedv;
     int                        use_passthroughgain;
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
       
     char f2020[80] = {0};
 #ifdef __LPCNET__
-    sprintf(f2020,"|2020|2020B");
+    sprintf(f2020,"|2020|2020B|2020C");
 #endif
     
     if (argc < 4) {
@@ -81,8 +81,6 @@ int main(int argc, char *argv[]) {
                 "\n"
                 "  --discard               Reset BER stats on loss of sync, helps us get sensible BER results\n"
                 "  --dpsk                  Use differential PSK rather than coherent PSK\n"
-                "  --indopt       0|1      Choose index optimised VQ for 2020/2020B, no effect other modes\n"
-                "                          default for 2020/2020B 0/1/1 (off/on/on)\n"
                 "  --reliabletext txt      Send 'txt' using reliable text protocol\n"
                 "  --txtrx        filename Store reliable text output to filename\n"
                 "  --squelch      leveldB  Set squelch level\n"
@@ -96,7 +94,7 @@ int main(int argc, char *argv[]) {
     }
 
     use_testframes = verbose = discard = use_complex = use_dpsk = use_squelch = 0; use_reliabletext = 0;
-    vq_type = -1; use_passthroughgain = 0;
+    use_passthroughgain = 0;
     
     int o = 0;
     int opt_idx = 0;
@@ -112,12 +110,11 @@ int main(int argc, char *argv[]) {
             {"usecomplex",      no_argument,        0, 'c'},
             {"verbose1",        no_argument,        0, 'v'},
             {"vv",              no_argument,        0, 'w'},
-            {"indopt",          required_argument,  0, 'n'},
             {"passthroughgain", required_argument,  0, 'p'},
             {0, 0, 0, 0}
         };
 
-        o = getopt_long(argc,argv,"idhr:s:x:tcvwn:p:",long_opts,&opt_idx);
+        o = getopt_long(argc,argv,"idhr:s:x:tcvwp:",long_opts,&opt_idx);
 
         switch(o) {
         case 'i':
@@ -128,12 +125,6 @@ int main(int argc, char *argv[]) {
             break;
         case 'd':
             use_dpsk = 1;
-            break;
-        case 'n':
-            if (atoi(optarg) == 0)
-                vq_type = 1;
-            else
-                vq_type = 2;
             break;
 	case 'p':
 	    use_passthroughgain = 1;
@@ -183,6 +174,7 @@ int main(int argc, char *argv[]) {
     #ifdef __LPCNET__
     if (!strcmp(argv[dx],"2020"))  mode = FREEDV_MODE_2020;
     if (!strcmp(argv[dx],"2020B"))  mode = FREEDV_MODE_2020B;
+    if (!strcmp(argv[dx],"2020C"))  mode = FREEDV_MODE_2020C;
     #endif
     if (mode == -1) {
         fprintf(stderr, "Error in mode: %s\n", argv[dx]);
@@ -203,14 +195,7 @@ int main(int argc, char *argv[]) {
 	exit(1);
     }
 
-    if (vq_type == -1)
-        freedv = freedv_open(mode);
-    else {
-        // 2020x: specify VQ type
-        struct freedv_advanced adv;
-        adv.lpcnet_vq_type = vq_type;
-        freedv = freedv_open_advanced(mode, &adv);
-    }
+    freedv = freedv_open(mode);
     assert(freedv != NULL);
 
     /* set up a few options, calling these is optional -------------------------*/
@@ -225,7 +210,7 @@ int main(int argc, char *argv[]) {
     freedv_set_dpsk(freedv, use_dpsk);
     if (use_passthroughgain) freedv_passthrough_gain(freedv, passthroughgain);
     
-    /* install optional handler for recevied txt characters */
+    /* install optional handler for received txt characters */
     if (ftxt_rx != NULL)
     {
         if (use_reliabletext)
@@ -317,7 +302,8 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "BER......: %5.4f  Tbits: %8d  Terrs: %8d\n",
 		                    (double)uncoded_ber, Tbits, Terrs);
         if ((mode == FREEDV_MODE_700D) || (mode == FREEDV_MODE_700E)  ||
-            (mode == FREEDV_MODE_2020) || (mode == FREEDV_MODE_2020B) ) {
+            (mode == FREEDV_MODE_2020) || (mode == FREEDV_MODE_2020B) ||
+            (mode == FREEDV_MODE_2020C)) {
             int Tbits_coded = freedv_get_total_bits_coded(freedv);
             int Terrs_coded = freedv_get_total_bit_errors_coded(freedv);
             float coded_ber = (float)Terrs_coded/Tbits_coded;

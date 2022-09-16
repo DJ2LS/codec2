@@ -4,7 +4,7 @@
   AUTHOR......: David Rowe
   DATE CREATED: August 2014
 
-  Library of API functions that implement FreeDV "modes", useful for
+  Library of API functions that implement the FreeDV API, useful for
   embedding FreeDV in other programs.  Please see:
 
   1. README_freedv.md
@@ -49,9 +49,10 @@
 #define FREEDV_MODE_800XA       5
 #define FREEDV_MODE_700C        6
 #define FREEDV_MODE_700D        7
+#define FREEDV_MODE_700E       13
 #define FREEDV_MODE_2020        8
 #define FREEDV_MODE_2020B      16
-#define FREEDV_MODE_700E       13
+#define FREEDV_MODE_2020C      17
 
 // available data modes
 #define FREEDV_MODE_FSK_LDPC    9
@@ -117,6 +118,9 @@
 #if !defined(FREEDV_MODE_2020B_EN)
         #define FREEDV_MODE_2020B_EN FREEDV_MODE_EN_DEFAULT
 #endif
+#if !defined(FREEDV_MODE_2020C_EN)
+        #define FREEDV_MODE_2020C_EN FREEDV_MODE_EN_DEFAULT
+#endif
 #if !defined(FREEDV_MODE_FSK_LDPC_EN)
         #define FREEDV_MODE_FSK_LDPC_EN FREEDV_MODE_EN_DEFAULT
 #endif
@@ -137,7 +141,7 @@ struct freedv;
 
 // Some modes allow extra configuration parameters
 struct freedv_advanced {
-    int lpcnet_vq_type;                      // see lpcnet_freedv.h
+    int interleave_frames;                   // now unused but remains to prevent breaking API for legacy apps
 
     // parameters for FREEDV_MODE_FSK_LDPC
     int M;                                   // 2 or 4 FSK

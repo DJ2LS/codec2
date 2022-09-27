@@ -427,10 +427,13 @@ int freedv_rx_fsk_ldpc_data(struct freedv *f, COMP demod_in[]) {
 
     if (f->frame_llr_nbits >= bits_per_frame) {
         /* We have an entire frame of llrs, place them at the end of the double buffer */
+        /*
         memmove(f->twoframes_llr, &f->twoframes_llr[bits_per_frame], bits_per_frame*sizeof(float));
         memcpy(&f->twoframes_llr[bits_per_frame], f->frame_llr, bits_per_frame*sizeof(float));
-
+        */
         /* update new hard decisions buffer (used for UW search) */
+        
+        /*
         memmove(f->twoframes_hard, &f->twoframes_hard[bits_per_frame], bits_per_frame);
         for(int i=0; i<bits_per_frame; i++) {
             if (f->frame_llr[i] < 0)
@@ -438,6 +441,7 @@ int freedv_rx_fsk_ldpc_data(struct freedv *f, COMP demod_in[]) {
             else
                 f->twoframes_hard[bits_per_frame + i] = 0;
         }
+        */
 
         /* update single frame buffer */
         memmove(f->frame_llr, &f->frame_llr[bits_per_frame], (f->frame_llr_nbits-bits_per_frame)*sizeof(float));

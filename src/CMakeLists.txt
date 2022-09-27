@@ -191,6 +191,7 @@ set(CODEC2_SRCS
     freedv_fsk.c
     freedv_vhf_framing.c
     freedv_data_channel.c
+    freedv_ofdm_data.c
     varicode.c
     modem_stats.c
     ofdm.c

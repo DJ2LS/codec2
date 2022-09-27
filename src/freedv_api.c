@@ -166,6 +166,49 @@ struct freedv *freedv_open_advanced(int mode, struct freedv_advanced *adv) {
 
 /*---------------------------------------------------------------------------*\
 
+  FUNCTION....: freedv_open_ofdm_advanced
+  AUTHOR......: Simon Lang
+  DATE CREATED: 26 Sep 2022
+
+  Open freedv ofdm mode with advanced paramters
+
+\*---------------------------------------------------------------------------*/
+struct freedv *freedv_open_ofdm_advanced(int mode, struct freedv_ofdm_advanced *adv) {
+    struct freedv *f;
+    
+    assert(FREEDV_PEAK == OFDM_PEAK);
+    assert(FREEDV_VARICODE_MAX_BITS == VARICODE_MAX_BITS);
+    
+    if ((FDV_MODE_ACTIVE( FREEDV_MODE_1600,   mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_700C,   mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_700D,   mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_700E,   mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_2400A,  mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_2400B,  mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_800XA,  mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_2020,   mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_2020B,   mode)  ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_2020C,   mode)  ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_FSK_LDPC, mode) ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, mode)   ||
+         FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, mode)) == false) return NULL;
+    
+    /* set everything to zero just in case */
+    f = (struct freedv*)CALLOC(1, sizeof(struct freedv));
+    if (f == NULL) return NULL;    
+    
+    f->mode = mode;
+    
+    if (FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, mode)) freedv_ofdm_data_adv_open(f, adv);
+    
+    varicode_decode_init(&f->varicode_dec_states, 1);
+    return f;
+}
+
+/*---------------------------------------------------------------------------*\
+
   FUNCTION....: freedv_close
   AUTHOR......: David Rowe
   DATE CREATED: 3 August 2014
@@ -237,7 +280,8 @@ void freedv_close(struct freedv *freedv) {
 
     if (FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, freedv->mode) ||
         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, freedv->mode) ||
-        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, freedv->mode))
+        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, freedv->mode) ||
+        FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, freedv->mode))
     {
         FREE(freedv->rx_syms);
         FREE(freedv->rx_amps);
@@ -267,13 +311,15 @@ static int is_ofdm_mode(struct freedv *f) {
            FDV_MODE_ACTIVE( FREEDV_MODE_700E, f->mode)   ||
            FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) ||
            FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, f->mode) ||
-           FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode);
+           FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode) ||
+           FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, f->mode);
 }
        
 static int is_ofdm_data_mode(struct freedv *f) {
     return FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) ||
            FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, f->mode) ||
-           FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode);
+           FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode) ||
+           FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, f->mode);
 }
        
 /*---------------------------------------------------------------------------*\
@@ -452,7 +498,8 @@ void freedv_rawdatacomptx(struct freedv *f, COMP mod_out[], unsigned char *packe
     if (FDV_MODE_ACTIVE( FREEDV_MODE_700D, f->mode)   ||
         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) ||
         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, f->mode) ||
-        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode)) freedv_comptx_ofdm(f, mod_out);
+        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode) ||
+        FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, f->mode)) freedv_comptx_ofdm(f, mod_out);
 
     if (FDV_MODE_ACTIVE( FREEDV_MODE_FSK_LDPC, f->mode)) {
         freedv_tx_fsk_ldpc_data(f, mod_out);
@@ -1014,7 +1061,8 @@ int freedv_rawdatacomprx(struct freedv *f, unsigned char *packed_payload_bits, C
     if (FDV_MODE_ACTIVE( FREEDV_MODE_700D, f->mode)   ||
         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) ||
         FDV_MODE_ACTIVE( FREEDV_MODE_DATAC1, f->mode) ||
-        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode)) rx_status = freedv_comp_short_rx_ofdm(f, (void*)demod_in, 0, 1.0f);
+        FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode) ||
+        FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, f->mode)) rx_status = freedv_comp_short_rx_ofdm(f, (void*)demod_in, 0, 1.0f);
     if (FDV_MODE_ACTIVE( FREEDV_MODE_FSK_LDPC, f->mode)) {
         rx_status = freedv_rx_fsk_ldpc_data(f, demod_in);
     }
@@ -1270,7 +1318,7 @@ void freedv_set_clip(struct freedv *f, int val) {
 
 void freedv_set_tx_bpf(struct freedv *f, int val) {
     if (FDV_MODE_ACTIVE( FREEDV_MODE_700D, f->mode) || FDV_MODE_ACTIVE( FREEDV_MODE_700E, f->mode) 
-        || FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) || FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode)) {
+        || FDV_MODE_ACTIVE( FREEDV_MODE_DATAC0, f->mode) || FDV_MODE_ACTIVE( FREEDV_MODE_DATAC3, f->mode) || FDV_MODE_ACTIVE( FREEDV_MODE_OFDM_ADV, f->mode)) {
         ofdm_set_tx_bpf(f->ofdm, val);
     }
 }

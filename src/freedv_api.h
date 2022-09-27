@@ -37,6 +37,8 @@
 #include <sys/types.h>
 // This declares a single-precision (float) complex number
 #include "comp.h"
+#include <stdbool.h>
+#include <stdint.h>             // needed for uint8_t support
 
 #ifdef __cplusplus
   extern "C" {
@@ -59,6 +61,7 @@
 #define FREEDV_MODE_DATAC1     10
 #define FREEDV_MODE_DATAC3     12
 #define FREEDV_MODE_DATAC0     14
+#define FREEDV_MODE_OFDM_ADV   100
 
 // Sample rates used
 #define FREEDV_FS_8000          8000
@@ -79,6 +82,8 @@
 #define FREEDV_SYNC_MANUAL 2                 // fall out of sync only under operator control
 
 #define FREEDV_VARICODE_MAX_BITS  12         // max bits for each ASCII character
+
+#define MAX_UW_BITS 64                       // max bits for unique word used in ofdm modem
 
 // These macros allow us to disable unwanted modes at compile tine, for example
 // to save memory on embedded systems or the remove need to link other
@@ -133,6 +138,9 @@
 #if !defined(FREEDV_MODE_DATAC3_EN)
         #define FREEDV_MODE_DATAC3_EN FREEDV_MODE_EN_DEFAULT
 #endif
+#if !defined(FREEDV_MODE_OFDM_ADV_EN)
+        #define FREEDV_MODE_OFDM_ADV_EN FREEDV_MODE_EN_DEFAULT
+#endif
 
 #define FDV_MODE_ACTIVE(mode_name, var)  ((mode_name##_EN) == 0 ? 0: (var) == mode_name)
 
@@ -150,6 +158,42 @@ struct freedv_advanced {
     int first_tone;                          // Freq of first tone Hz
     int tone_spacing;                        // Spacing between tones Hz
     char *codename;                          // LDPC codename, from codes listed in ldpc_codes.c
+};
+
+
+
+// extra configuration for ofdm modem
+struct freedv_ofdm_advanced {
+
+    int nc;            /* Number of carriers */
+    int np;            /* number of modem frames per packet */
+    int ns;            /* Number of Symbol frames */
+    int bps;           /* bits per symbol */
+    int nuwbits;       /* number of unique word bits */
+    int bad_uw_errors;
+    int ftwindowwidth;
+    int edge_pilots;    
+    float ts;          /* symbol duration */
+    float tcp;         /* Cyclic Prefix duration */
+    float timing_mx_thresh;
+    bool tx_bpf_en;       /* default clippedtx BPF state */
+    //float amp_scale;      /* used to scale Tx waveform to approx FREEDV_PEAK with clipper off */
+    float clip_gain1;     /* gain we apply to Tx signal before clipping to control PAPR*/
+    float clip_gain2;     /* gain we apply to Tx signal after clipping and BBF to control peak level */
+    bool  clip_en;
+    int txtbits;       /* number of auxiliary data bits */    
+    char *state_machine;  /* name of sync state machine used for this mode */
+    char *data_mode;
+    char *codename;       /* name of LDPC code used with this mode */
+    int amp_est_mode;
+
+    //float tx_centre;   /* TX Centre Audio Frequency */
+    //float rx_centre;   /* RX Centre Audio Frequency */
+    uint8_t tx_uw[MAX_UW_BITS]; /* user defined unique word */
+
+
+
+
 };
 
 // Called when text message char is decoded
@@ -180,6 +224,7 @@ typedef void (*freedv_callback_datatx)(void *, unsigned char *packet, size_t *si
 
 // open, close ----------------------------------------------------------------
 
+struct freedv *freedv_open_ofdm_advanced(int mode, struct freedv_ofdm_advanced *adv);
 struct freedv *freedv_open_advanced(int mode, struct freedv_advanced *adv);
 struct freedv *freedv_open(int mode);
 void freedv_close   (struct freedv *freedv);
